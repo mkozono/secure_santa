@@ -1,0 +1,14 @@
+development:
+          adapter: postgresql
+          database: secure_santa_dev
+          host: localhost
+
+test:
+          adapter: postgresql
+          database: secure_santa_test
+          host: localhost
+
+production:
+          adapter: postgresql
+          database: secure_santa_prod
+          host: localhost
