@@ -1,4 +1,7 @@
 SecureSanta::Application.routes.draw do
+
+  root :to => 'participants#add'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
