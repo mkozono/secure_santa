@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Events do
+describe Event do
   
   describe "accessible attributes" do
     it "has a name" do
-      event = Events.new
+      event = Event.new
       event.name = "Christmas 2013"
       event.name.should == "Christmas 2013"
     end
@@ -12,12 +12,12 @@ describe Events do
 
   describe "validation" do
     it "requires a name" do
-      event = Events.new name: ""
+      event = Event.new name: ""
       event.should_not be_valid
     end
 
   	it "limits name length to 300" do
-      event = Events.new name: "a"*301
+      event = Event.new name: "a"*301
       event.should_not be_valid
     end
   end

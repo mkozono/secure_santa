@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Users do
+describe User do
   
   describe "accessible attributes" do
     it "has a name" do
-      user = Users.new
+      user = User.new
       user.name = "Michael"
       user.name.should == "Michael"
     end
@@ -12,12 +12,12 @@ describe Users do
 
   describe "validation" do
     it "requires a name" do
-      user = Users.new name: ""
+      user = User.new name: ""
       user.should_not be_valid
     end
 
   	it "limits name length to 300" do
-      user = Users.new name: "a"*301
+      user = User.new name: "a"*301
       user.should_not be_valid
     end
   end
