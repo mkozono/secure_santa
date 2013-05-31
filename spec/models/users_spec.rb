@@ -16,8 +16,8 @@ describe User do
       user.should_not be_valid
     end
 
-  	it "limits name length to 300" do
-      user = User.new name: "a"*301
+  	it "limits name length to 400" do
+      user = User.new name: "a"*401
       user.should_not be_valid
     end
   end

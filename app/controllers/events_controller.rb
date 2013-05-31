@@ -1,8 +1,40 @@
 class EventsController < ApplicationController
+
+  def index
+    @events = Event.all
+   
+    respond_to do |format|
+      format.html
+      format.json { render :json => @events }
+    end
+  end
+
   def new
   	@event = Event.new
+
+    5.times { @event.users.build } # blank starting fields
+ 
+    respond_to do |format|
+      format.html
+      format.json { render :json => @event }
+    end
   end
 
   def create
+    @event = Event.new(params[:event])
+    if @event.save
+      flash[:notice] = "Successfully created event."
+      redirect_to @event
+    else
+      render :new
+    end
+  end
+
+  def edit
+    @event = Event.find(params[:id])
+  end
+
+  def show
+    @event = Event.find(params[:id])
   end
 end

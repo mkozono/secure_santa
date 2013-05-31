@@ -1,0 +1,10 @@
+h2 Event Details
+
+h3 Event Name
+= @event.name
+
+h3 Invitees
+ol
+  - for user in @event.users
+    li
+      = user.name
