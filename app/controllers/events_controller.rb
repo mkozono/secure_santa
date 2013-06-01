@@ -34,6 +34,18 @@ class EventsController < ApplicationController
     @event = Event.find(params[:id])
   end
 
+  def update
+    @event = Event.find(params[:id])
+    
+    if @event.update_attributes(params[:event])
+      flash[:notice] = "Successfully updated event."
+      redirect_to @event
+    else
+      flash[:error] = "Unable to save edits."
+      render :edit
+    end
+  end
+
   def show
     @event = Event.find(params[:id])
   end
