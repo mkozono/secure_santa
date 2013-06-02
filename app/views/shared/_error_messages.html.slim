@@ -1,0 +1,8 @@
+- if model_obj.errors.any?
+  #error_explanation
+    h2
+      = pluralize(model_obj.errors.count, "error")
+      |  prevented this event from being saved:
+    ul
+      - model_obj.errors.full_messages.each do |msg|
+        li= msg
