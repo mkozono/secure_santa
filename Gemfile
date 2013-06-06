@@ -13,8 +13,7 @@ gem 'strong_parameters', '0.2.1'
 
 group :development, :test do
   gem 'rspec-rails', '2.13.2'
-  # gem 'rspec-rails', :git => "git@github.com:rspec/rspec-rails.git", :branch => 'master'
-  gem 'guard-rspec', '3.0.0'
+  gem 'factory_girl_rails', '4.2.1'
   gem 'guard-spork', '1.5.0'  
   gem 'spork', '0.9.2'
 end
@@ -28,7 +27,12 @@ group :assets do
 end
 
 group :test do
-  gem 'factory_girl_rails', '4.2.1'
   gem 'rb-fsevent', '0.9.3', :require => false
   gem 'growl', '1.0.3'
+  gem 'capybara', '2.1.0'
+  gem 'capybara-webkit'
+  gem 'guard-rspec', '3.0.0'
+  gem 'launchy', '2.3.0'
+  gem 'database_cleaner', '1.0.1'
+  gem 'selenium-webdriver'
 end
