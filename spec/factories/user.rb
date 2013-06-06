@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :user do
-    name "User Name Here"
+    name { Faker::Name.name }
+    event
 
     trait :invalid do
       name nil

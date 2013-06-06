@@ -138,5 +138,29 @@ describe EventsController do
     end
   end
 
+  describe 'DELETE #destroy' do
+    context "when the event exists" do
+      before :each do
+        @event = FactoryGirl.create(:event)
+      end
+      
+      it "deletes the event" do
+        expect{
+          delete :destroy, id: @event        
+        }.to change(Event,:count).by(-1)
+      end
+        
+      it "redirects to events#index" do
+        delete :destroy, id: @event
+        response.should redirect_to events_url
+      end
+    end
+    context "when the event does not exist" do
+      it "redirects to events#index" do
+        delete :destroy, id: 9999999
+        response.should redirect_to events_url
+      end
+    end
+  end
 
 end

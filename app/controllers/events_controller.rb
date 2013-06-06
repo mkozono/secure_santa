@@ -41,12 +41,22 @@ class EventsController < ApplicationController
   def update
     @event = Event.find(params[:id])
     if @event.update_attributes(event_params)
-      flash[:notice] = "Successfully updated event."
-      redirect_to @event
+      redirect_to @event, notice: "Successfully updated event."
     else
       flash[:error] = "Unable to save edits."
       render :edit
     end
+  end
+
+  def destroy
+    @event = Event.find_by_id(params[:id])
+    if @event
+      @event.destroy
+      flash[:notice] = "Successfully deleted event."
+    else
+      flash[:error] = "Could not find event."
+    end
+    redirect_to events_path
   end
 
   private
