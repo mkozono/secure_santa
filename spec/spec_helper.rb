@@ -52,6 +52,9 @@ Spork.prefork do
   require 'rspec/autorun'
   require 'capybara/rspec'
   require 'database_cleaner'
+  require 'coveralls'
+  
+  Coveralls.wear!
 
   Capybara.javascript_driver = :webkit
   Capybara.current_driver = Capybara.javascript_driver

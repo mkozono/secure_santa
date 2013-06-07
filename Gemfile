@@ -16,7 +16,8 @@ group :development, :test do
   gem 'factory_girl_rails', '4.2.1'
   gem 'guard-spork', '1.5.0'  
   gem 'spork', '0.9.2'
-  gem 'travis-lint'
+  gem 'travis-lint', require: false
+  gem 'coveralls', require: false
 end
 
 # Gems used only for assets and not required
