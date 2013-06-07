@@ -9,7 +9,7 @@ env:
 script:
   - RAILS_ENV=test bundle exec rake --trace db:migrate
   - bundle exec rake db:test:prepare
-  - bundle exec rspec spec/
+  - xvfb-run rspec spec/
 before_script:
   - mysql -e 'create database secure_santa_test'
   - psql -c 'create database secure_santa_test' -U postgres
