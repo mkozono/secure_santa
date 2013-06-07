@@ -8,3 +8,7 @@ ol
   - for user in @event.users
     li
       = user.name
+
+.delete
+  = form_for(@event, :html => { method: :delete }) do |f|
+    = f.submit value: "Delete Event"

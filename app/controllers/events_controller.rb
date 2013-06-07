@@ -10,7 +10,11 @@ class EventsController < ApplicationController
   end
 
   def show
-    @event = Event.find(params[:id])
+    @event = Event.find_by_id(params[:id])
+    if @event.nil?
+      flash[:notice] = "Could not find event with that ID."
+      redirect_to events_path
+    end
   end
 
   def new
@@ -30,6 +34,7 @@ class EventsController < ApplicationController
       flash[:notice] = "Successfully created event."
       redirect_to @event
     else
+      flash[:error] = "Unable to create event."
       render :new
     end
   end

@@ -16,18 +16,20 @@ end
 
 feature "Viewing an event", :js => true do
   let(:event) { FactoryGirl.create(:event_with_users) }
-  background do
-    visit "/events/#{event.id}"
-  end
 
   scenario "Event information is displayed" do
+    visit "/events/#{event.id}"
     page.should have_content(event.name)
     event.users.each do |user|
       page.should have_content(user.name)
     end
   end
 
-  scenario "redirects to index when id not found"
+  scenario "redirects to index when id not found" do
+    visit "/events/99999999"
+    page.should have_content "Could not find"
+    current_path.should == events_path
+  end
 end
 
 feature "Creating a new event", :js => true do
@@ -53,7 +55,12 @@ feature "Creating a new event", :js => true do
     User.count.should == 2
   end
 
-  scenario "submitting invalid data"
+  scenario "submitting invalid data" do
+    expect {
+      click_on "Create Event"
+      page.body.should match "Unable to create"
+    }.to_not change(Event, :count)
+  end
 end
 
 feature "Editing an event", :js => true do
@@ -81,5 +88,25 @@ feature "Editing an event", :js => true do
     event.users.map{|u|u.name}.should include "New User Name"
   end
 
-  scenario "submitting invalid data"
+  scenario "submitting invalid data" do
+    fill_in "Event Name", with: ""
+    expect {
+      click_on "Update Event"
+      page.body.should match "Unable to save"
+    }.to_not change(Event, :count)
+  end
+end
+
+feature "Deleting an event", :js => true do
+  let(:event) { FactoryGirl.create(:event_with_users) }
+  background do
+    visit "/events/#{event.id}"
+  end
+
+  scenario "Clicking delete button" do
+    expect {
+      click_on "Delete Event"
+      page.body.should match "Success" # Hack: The form doesn't seem to be submitted until we access page
+    }.to change(Event, :count).from(1).to(0)
+  end
 end
