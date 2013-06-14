@@ -18,4 +18,12 @@ describe User do
     FactoryGirl.build(:user, event: nil).should_not be_valid
   end
 
+  it "can have a giftee" do
+    bob = FactoryGirl.create(:user)
+    sue = FactoryGirl.build(:user)
+    bob.giftee = sue
+    bob.giftee.should == sue
+    sue.gifter.should == bob
+  end
+
 end
