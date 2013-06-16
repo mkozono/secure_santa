@@ -18,12 +18,33 @@ describe User do
     FactoryGirl.build(:user, event: nil).should_not be_valid
   end
 
-  it "can have a giftee" do
-    bob = FactoryGirl.create(:user)
-    sue = FactoryGirl.build(:user)
-    bob.giftee = sue
-    bob.giftee.should == sue
-    sue.gifter.should == bob
+  describe "giftee" do
+    before do
+      @christmas = FactoryGirl.create(:event)
+      @bob = FactoryGirl.create(:user, event: @christmas)
+      @sue = FactoryGirl.create(:user, event: @christmas)
+    end
+
+    it "can have a giftee" do
+      @bob.giftee = @sue
+      @bob.giftee.should == @sue
+      @sue.gifter.should == @bob
+    end
+
+    context "when assigning a giftee belonging to the same event" do
+      it "is valid" do
+        @bob.giftee = @sue
+        @bob.should be_valid
+      end
+    end
+    context "when assigning a giftee belonging to a different event" do
+      it "is invalid" do
+        thanksgiving = FactoryGirl.create(:event)
+        @sue.event = thanksgiving
+        @bob.giftee = @sue
+        @bob.should_not be_valid
+      end
+    end
   end
 
 end
