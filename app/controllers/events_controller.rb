@@ -64,6 +64,18 @@ class EventsController < ApplicationController
     redirect_to events_path
   end
 
+  def assign_giftees
+    @event = Event.find(params[:id])
+    begin
+      @event.assign_giftees
+      redirect_to @event
+    rescue Exception => e
+      Rails.logger.error e.inspect
+      Rails.logger.error e.backtrace
+      redirect_to @event, notice: "There was an error while assigning giftees."
+    end
+  end
+
   private
 
     def event_params

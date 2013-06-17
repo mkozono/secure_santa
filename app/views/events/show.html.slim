@@ -9,6 +9,21 @@ ol
     li
       = user.name
 
+.assignments
+  - if @event.assigned?
+    h3 Assignments
+    ol
+      - for user in @event.users
+        li
+          = user.name
+          |  is giving to 
+          = user.giftee.name
+
+  = form_for(@event, url: assign_giftees_event_path(@event)) do |f|
+    = f.submit value: "Assign Giftees"
+
+= link_to("Edit Event", edit_event_path(@event))
+
 .delete
-  = form_for(@event, :html => { method: :delete }) do |f|
+  = form_for(@event, html: { method: :delete }) do |f|
     = f.submit value: "Delete Event"
