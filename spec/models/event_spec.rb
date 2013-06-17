@@ -16,10 +16,22 @@ describe Event do
 
   context "#destroy" do
     it "destroys associated users" do
-      event = FactoryGirl.create(:event_with_users)
+      event = FactoryGirl.create(:event_with_users, users_count: 3)
       user_count = User.count
       event.destroy
-      User.count.should == user_count - 5
+      User.count.should == user_count - 3
+    end
+  end
+
+  context "#assign_giftees" do
+    context "with users" do
+      let(:event) { FactoryGirl.create(:event_with_users, users_count: 3) }
+      it "assigns giftees to users" do
+        event.assign_giftees
+        event.users.each do |user|
+          user.giftee.should be_a User
+        end
+      end
     end
   end
 
