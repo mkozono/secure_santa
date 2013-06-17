@@ -45,6 +45,7 @@ module SecureSanta
       raise ArgumentError.new("users must not be nil") if users.nil?
       raise ArgumentError.new("expected Enumerable, got #{users.class}") if !users.class.include?(Enumerable)
       raise ArgumentError.new("users must not be empty") if users.empty?
+      raise ArgumentError.new("there must be more than 2 users to assign") if users.size < 3
       raise ArgumentError.new("users must be unique") if users.to_a.uniq.size < users.size
     end
 

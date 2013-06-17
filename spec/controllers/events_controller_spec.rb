@@ -163,4 +163,33 @@ describe EventsController do
     end
   end
 
+  describe 'PUT #assign_giftees' do
+    context "when the event is ready for assignment" do
+      let(:event) { FactoryGirl.create(:event_with_users, users_count: 3) }
+      it "assigns giftees" do
+        put :assign_giftees, id: event
+        event.users.each do |user|
+          user.giftee.should be_present
+        end
+      end
+      it "redirects to show the event" do
+        put :assign_giftees, id: event
+        response.should redirect_to event
+      end
+    end
+    context "when the event is not ready for assignment" do
+      let(:event) { FactoryGirl.create(:event_with_users, users_count: 2) }
+      it "does not assign giftees" do
+        put :assign_giftees, id: event
+        event.users.each do |user|
+          user.giftee.should be_nil
+        end
+      end
+      it "redirects to show the event" do
+        put :assign_giftees, id: event
+        response.should redirect_to event
+      end
+    end
+  end
+
 end

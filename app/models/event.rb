@@ -18,4 +18,11 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def assigned?
+    users.each do |user|
+      return false if user.gifter.blank?
+    end
+    true
+  end
+
 end

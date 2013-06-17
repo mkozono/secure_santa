@@ -30,6 +30,12 @@ module SecureSanta
             expect { Assigner.new user_ids }.to raise_error(ArgumentError)
           end
         end
+        context "when there are less than 3 user_ids" do
+          let(:user_ids) { [1, 2] }
+          it "raises ArgumentError" do
+            expect { Assigner.new user_ids }.to raise_error(ArgumentError)
+          end
+        end
       end
     end
 
