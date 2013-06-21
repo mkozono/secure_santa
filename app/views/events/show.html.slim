@@ -1,9 +1,11 @@
-h2 Event Details
+h1 Event Details
 
-h3 Event Name
+= render "shared/flash_messages"
+
+h2 Event Name
 = @event.name
 
-h3 Invitees
+h2 Invitees
 ol
   - for user in @event.users
     li

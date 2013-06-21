@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title SecureSanta
+    title = full_title(yield(:title))
     meta name="keywords" content="secure santa, secret santa"
     meta name="author" content="Michael Kozono"
     = stylesheet_link_tag    "application", :media => "all"
@@ -9,16 +9,10 @@ html
     = csrf_meta_tags
 
   body
-    h1#logo Secure Santa
+    = render "layouts/header"
 
-    noscript Javascript must be enabled for this app to work.
-
-    #content
-
-      - flash.each do |name, msg|
-        = content_tag :div, msg, :class => "flash_#{name}"
-
+    #content.container
       == yield
 
-    #footer
+    #footer.container
       | Copyright © #{Time.now.year} Michael Kozono
