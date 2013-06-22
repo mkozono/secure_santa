@@ -1,8 +1,8 @@
-h1 Events#index
+h1 All Events
 
 = render "shared/flash_messages"
 
 ul#events
   - for event in @events
     li
-      = event.name
+      = link_to event.name, event
