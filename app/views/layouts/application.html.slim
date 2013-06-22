@@ -1,24 +1,21 @@
 doctype html
 html
   head
-    title SecureSanta
+    title = full_title(yield(:title))
     meta name="keywords" content="secure santa, secret santa"
     meta name="author" content="Michael Kozono"
     = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "application"
     = csrf_meta_tags
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
   body
-    h1#logo Secure Santa
+    = render "layouts/navbar"
 
-    noscript Javascript must be enabled for this app to work.
-
-    #content
-
-      - flash.each do |name, msg|
-        = content_tag :div, msg, :class => "flash_#{name}"
-
+    #content.container
       == yield
 
-    #footer
+    #footer.container
       | Copyright © #{Time.now.year} Michael Kozono

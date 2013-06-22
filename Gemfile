@@ -2,7 +2,9 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
 
-gem 'bootstrap-sass', '2.3.1'
+gem 'therubyracer'
+gem 'less-rails'
+gem 'twitter-bootstrap-rails'
 gem 'faker', '1.1.2'
 gem 'will_paginate', '3.0.4'
 gem 'bootstrap-will_paginate', '0.0.9'

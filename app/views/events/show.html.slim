@@ -1,9 +1,11 @@
-h2 Event Details
+h1 Event Details
 
-h3 Event Name
+= render "shared/flash_messages"
+
+h2 Event Name
 = @event.name
 
-h3 Invitees
+h2 Invitees
 ol
   - for user in @event.users
     li
@@ -19,11 +21,11 @@ ol
           |  is giving to 
           = user.giftee.name
 
-  = form_for(@event, url: assign_giftees_event_path(@event)) do |f|
-    = f.submit value: "Assign Giftees"
+= form_for(@event, url: assign_giftees_event_path(@event), html: { class: "span2" }) do |f|
+  = f.submit value: "Assign Giftees", class: "btn btn-primary"
 
-= link_to("Edit Event", edit_event_path(@event))
+.span2
+  = link_to("Edit Event", edit_event_path(@event), class: "btn btn-warning")
 
-.delete
-  = form_for(@event, html: { method: :delete }) do |f|
-    = f.submit value: "Delete Event"
+= form_for(@event, html: { method: :delete }, html: { class: "span2" }) do |f|
+  = f.submit value: "Delete Event", class: "btn btn-danger"
