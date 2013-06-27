@@ -20,7 +20,7 @@ class EventsController < ApplicationController
   def new
   	@event = Event.new
 
-    5.times { @event.users.build } # blank starting fields
+    6.times { @event.users.build } # blank starting fields
  
     respond_to do |format|
       format.html

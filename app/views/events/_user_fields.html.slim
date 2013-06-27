@@ -1,5 +1,5 @@
-.fields
-  = f.label :name, "Invitee"
-  br
-  = f.text_field :name
-  = link_to_remove_fields "remove", f
+.span6
+  .field
+    .row
+      .span5 = f.text_field :name, placeholder: "Invitee", style: "width: 100%"
+      .span1 = link_to_remove_fields "remove", f
