@@ -39,16 +39,13 @@ feature "Creating a new event", :js => true do
 
   scenario "Adding invitee textboxes" do
     click_link "Add Invitee"
-    page.should have_css("input[type='text']", :count => 7)
+    page.should have_css("input[type='text']", :count => 8)
   end
 
   scenario "Submitting valid data" do
     fill_in "Event Name", :with => Faker::Company.catch_phrase
-    2.times do |index|
-      within all(".fields")[index] do
-        fill_in "Invitee", :with => Faker::Name.name
-      end
-    end
+    find(:css, "input[id='event_users_attributes_0_name']").set(Faker::Name.name)
+    find(:css, "input[id='event_users_attributes_1_name']").set(Faker::Name.name)
     click_on "Create Event"
     page.body.should match "Success" # Hack: The form doesn't seem to be submitted until we access page
     Event.count.should == 1
@@ -78,9 +75,7 @@ feature "Editing an event", :js => true do
 
   scenario "Submitting valid data" do
     fill_in "Event Name", :with => "New Event Name"
-    within all(".fields")[0] do
-      fill_in "Invitee", :with => "New User Name"
-    end
+    find(:css, "input[id='event_users_attributes_0_name']").set("New User Name")
     click_on "Update Event"
     page.body.should match "Success" # Hack: The form doesn't seem to be submitted until we access page
     event.reload
