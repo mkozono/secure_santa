@@ -2,6 +2,14 @@
 
 @baseFontSize: 16px;
 
+@gridColumnWidth1200:     @gridColumnWidth; // essentially disabling biggest media size
+@gridGutterWidth1200:     @gridGutterWidth; // essentially disabling biggest media size
+
 body {
   padding-top: 60px;
+}
+@media (max-width: 979px) {
+  body {
+    padding-top: 0px;
+  }
 }

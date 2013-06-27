@@ -4,8 +4,8 @@ window.secureSanta.addFields = (link, association, content) ->
   new_id = new Date().getTime()
   regex = new RegExp("new_#{association}", "g")
   content = content.replace(regex, new_id)
-  $(link).before(content)
+  $("div.users").append(content)
 
 window.secureSanta.removeFields = (link) ->
   $(link).prev("input[type=hidden]").val("1")
-  $(link).closest(".fields").hide()
+  $(link).closest(".field").hide()

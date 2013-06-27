@@ -4,6 +4,7 @@ html
     title = full_title(yield(:title))
     meta name="keywords" content="secure santa, secret santa"
     meta name="author" content="Michael Kozono"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
     = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "application"
     = csrf_meta_tags
@@ -14,8 +15,9 @@ html
   body
     = render "layouts/navbar"
 
-    #content.container
-      == yield
+    .container
+      #content
+        == yield
 
-    #footer.container
-      | Copyright © #{Time.now.year} Michael Kozono
+      #footer style="margin-top: 15px; margin-bottom: 15px"
+        | Copyright © #{Time.now.year} Michael Kozono
