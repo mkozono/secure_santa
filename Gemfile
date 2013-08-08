@@ -13,6 +13,7 @@ gem 'jquery-rails', '2.2.1'
 gem 'pg', '0.15.1'
 gem 'slim-rails', '1.1.1'
 gem 'strong_parameters', '0.2.1'
+gem 'newrelic_rpm'
 
 group :development, :test do
   gem 'rspec-rails', '2.13.2'

@@ -115,6 +115,7 @@ GEM
     method_source (0.8.1)
     mime-types (1.23)
     multi_json (1.7.3)
+    newrelic_rpm (3.6.6.147)
     nokogiri (1.5.9)
     pg (0.15.1)
     polyglot (0.3.3)
@@ -247,6 +248,7 @@ DEPENDENCIES
   jquery-rails (= 2.2.1)
   launchy (= 2.3.0)
   less-rails
+  newrelic_rpm
   pg (= 0.15.1)
   rails (= 3.2.13)
   rb-fsevent (= 0.9.3)
