@@ -29,8 +29,14 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = Event.new(event_params)
-    if @event.save
+    begin
+      @event = Event.new(event_params)
+    rescue ActionController::ParameterMissing => e
+      Rails.logger.info "Parameter missing during event create. #{params}"
+      return head(:bad_request)
+    end
+
+    if @event && @event.save
       flash[:notice] = "Successfully created event."
       redirect_to @event
     else

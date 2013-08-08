@@ -11,7 +11,7 @@ class Event < ActiveRecord::Base
   accepts_nested_attributes_for :users, reject_if: lambda { |a| a[:name].blank? }, allow_destroy: true
 
   def assign_giftees
-    assigner = SecureSanta::Assigner.new users
+    assigner = SecureSanta::Assigner.new users.to_a
     assignments = assigner.assign_giftees
     assignments.each do |user, giftee|
       user.giftee = giftee
