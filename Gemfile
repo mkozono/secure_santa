@@ -1,44 +1,46 @@
 source 'https://rubygems.org'
 
 ruby '2.0.0'
-gem 'rails', '3.2.13'
+gem "rails", "~> 4.0.0"
 
 gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
-gem 'faker', '1.1.2'
+gem 'faker'
 gem 'will_paginate', '3.0.4'
 gem 'bootstrap-will_paginate', '0.0.9'
-gem 'jquery-rails', '2.2.1'
-gem 'pg', '0.15.1'
-gem 'slim-rails', '1.1.1'
-gem 'strong_parameters', '0.2.1'
+gem 'jquery-rails', '~> 3.0.4'
+gem 'pg', '~> 0.16.0'
+gem 'slim-rails', '~> 2.0.1'
+gem 'sass-rails',   '~> 4.0.0'
+gem 'coffee-rails', '~> 4.0.0'
+gem 'uglifier', '~> 2.1.2'
 gem 'newrelic_rpm'
 
+# Just during rails 4 upgrade
+gem 'protected_attributes'
+# Just during rails 4 upgrade
+
 group :development, :test do
-  gem 'rspec-rails', '2.13.2'
-  gem 'factory_girl_rails', '4.2.1'
-  gem 'guard-spork', '1.5.0'  
-  gem 'spork', '0.9.2'
+  gem 'rspec-rails', '~> 2.14.0'
+  gem 'factory_girl_rails', '~> 4.2.1'
+  gem 'guard-spork', '~> 1.5.1'  
+  gem 'spork', '~> 0.9.2'
   gem 'travis-lint', :require => false
   gem 'coveralls', :require => false
 end
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails',   '3.2.6'
-  gem 'coffee-rails', '3.2.2'
-  gem 'uglifier', '2.1.1'
+group :production do
+  gem 'rails_12factor'
 end
 
 group :test do
-  gem 'rb-fsevent', '0.9.3', :require => false
-  gem 'growl', '1.0.3'
-  gem 'capybara', '2.1.0'
+  gem 'rb-fsevent', :require => false
+  gem 'growl'
+  gem 'capybara'
   gem 'capybara-webkit'
-  gem 'guard-rspec', '3.0.0'
-  gem 'launchy', '2.3.0'
-  gem 'database_cleaner', '1.0.1'
+  gem 'guard-rspec'
+  gem 'launchy'
+  gem 'database_cleaner'
   gem 'selenium-webdriver'
 end

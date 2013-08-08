@@ -5,7 +5,7 @@ SecureSanta::Application.routes.draw do
   resources :events do
     resources :users
     member do
-      put :assign_giftees
+      patch :assign_giftees
     end
   end
 
