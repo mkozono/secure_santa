@@ -7,7 +7,7 @@ h2 Event Name
 
 h2 Invitees
 ol
-  - for user in @event.users
+  - for user in @event.users.order("id asc")
     li
       = user.name
 
@@ -15,7 +15,7 @@ ol
   - if @event.assigned?
     h3 Assignments
     ol
-      - for user in @event.users
+      - for user in @event.users.order("id asc")
         li
           = user.name
           |  is giving to 
