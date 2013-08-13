@@ -4,7 +4,7 @@ feature "Viewing all events", :js => true do
   # let(:events) { [FactoryGirl.create(:event_with_users), FactoryGirl.create(:event_with_users)] }
   background do
     @events = [Event.create!(:name => "Foo"), Event.create!(:name => "Bar")]
-    visit "/events"
+    visit events_path
   end
 
   scenario "Events are displayed" do
@@ -18,7 +18,7 @@ feature "Viewing an event", :js => true do
   let(:event) { FactoryGirl.create(:event_with_users) }
 
   scenario "Event information is displayed" do
-    visit "/events/#{event.id}"
+    visit event_path(event)
     page.should have_content(event.name)
     event.users.each do |user|
       page.should have_content(user.name)
@@ -34,7 +34,7 @@ end
 
 feature "Creating a new event", :js => true do
   background do
-    visit "/events/new"
+    visit new_event_path
   end
 
   scenario "Adding invitee textboxes" do
@@ -63,7 +63,7 @@ end
 feature "Editing an event", :js => true do
   let(:event) { FactoryGirl.create(:event_with_users) }
   background do
-    visit "/events/#{event.id}/edit"
+    visit edit_event_path(event)
   end
 
   scenario "Existing event information is displayed" do
@@ -95,7 +95,7 @@ end
 feature "Deleting an event", :js => true do
   let(:event) { FactoryGirl.create(:event_with_users) }
   background do
-    visit "/events/#{event.id}"
+    visit event_path(event)
   end
 
   scenario "Clicking delete button" do
