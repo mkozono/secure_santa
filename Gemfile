@@ -17,10 +17,6 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'uglifier', '~> 2.1.2'
 gem 'newrelic_rpm'
 
-# Just during rails 4 upgrade
-gem 'protected_attributes'
-# Just during rails 4 upgrade
-
 group :development, :test do
   gem 'rspec-rails', '~> 2.14.0'
   gem 'factory_girl_rails', '~> 4.2.1'
