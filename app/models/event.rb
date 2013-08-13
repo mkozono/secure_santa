@@ -12,7 +12,7 @@ class Event < ActiveRecord::Base
     assigner = SecureSanta::Assigner.new users.to_a
     assignments = assigner.assign_giftees
     assignments.each do |user, giftee|
-      user.giftee = giftee
+      user.update_attributes!(:giftee_id => giftee.id)
     end
   end
 

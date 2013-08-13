@@ -27,6 +27,7 @@ describe Event do
     let(:event) { FactoryGirl.create(:event_with_users, users_count: 3) }
     it "assigns giftees to users" do
       event.assign_giftees
+      event.reload
       event.users.each do |user|
         user.giftee.should be_a User
       end

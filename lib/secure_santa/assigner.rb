@@ -6,19 +6,20 @@ module SecureSanta
 
     attr_reader :assignments
 
-    def initialize(user_ids)
-      validate_input user_ids
-      @user_ids = user_ids
-      @assignments = nil
+    def initialize(users)
+      validate_input users
+      @users = users
     end
 
     def assign_giftees
+      @assignments = nil
       try_count = 0
+      giftees = @users.clone
       begin
         @assignments = {}
-        giftee_ids = @user_ids.clone.shuffle
-        @user_ids.each_with_index do |user_id, index|
-          @assignments[user_id] = giftee_ids[index]
+        giftees.shuffle!
+        @users.each_with_index do |user, index|
+          @assignments[user] = giftees[index]
         end
         try_count += 1
         # TODO: Define exception type
@@ -30,15 +31,11 @@ module SecureSanta
     private
 
     def assignments_valid?
-      return false if self_giftee_exist?
-      return true
-    end
-
-    def self_giftee_exist?
-      @assignments.each do |user_id, giftee_id|
-        return true if user_id.to_s == giftee_id.to_s
+      return false if @assignments.nil? || @assignments.empty?
+      @assignments.each do |user, giftee|
+        return false if user == giftee # self giftee
       end
-      false
+      true
     end
 
     def validate_input(users)
