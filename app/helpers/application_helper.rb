@@ -15,12 +15,11 @@ module ApplicationHelper
     fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
       render(association.to_s.singularize + "_fields", :f => builder)
     end
-    on_click = "secureSanta.addFields(this, \"#{association}\", \"#{escape_javascript(fields)}\")".html_safe
-    link_to_function(name, on_click)
+    link_to(name, "javascript:void(0)", { "class" => "add_field", "data-association" => association.to_s, "data-content" => "#{fields}" })
   end
 
   def link_to_remove_fields(name, f)
-    f.hidden_field(:_destroy) + link_to_function(name, "secureSanta.removeFields(this)", :tabindex => -1)
+    f.hidden_field(:_destroy) + link_to("Remove", "javascript:void(0)", { class: "remove_field", tabindex: "-1" })
   end
   
 end
