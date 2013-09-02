@@ -47,4 +47,10 @@ describe User do
     end
   end
 
+  specify "name must be unique per event" do
+    event = FactoryGirl.create(:event)
+    FactoryGirl.create(:user, name: "Bob", event: event)
+    FactoryGirl.build(:user, name: "Bob", event: event).should_not be_valid
+  end
+
 end

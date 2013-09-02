@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 400 }
   validates :event, presence: true
   validate :giftee_same_event, if: lambda { giftee.present? }
+  validates_uniqueness_of :name, scope: :event_id, message: "cannot be the same as another user in the event."
 
   private
 
