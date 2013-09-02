@@ -17,6 +17,7 @@ describe Event do
   describe "#destroy" do
     it "destroys associated users" do
       event = FactoryGirl.create(:event_with_users, users_count: 3)
+      event.reload
       user_count = User.count
       event.destroy
       User.count.should == user_count - 3
@@ -26,6 +27,7 @@ describe Event do
   describe "#assign_giftees" do
     let(:event) { FactoryGirl.create(:event_with_users, users_count: 3) }
     it "assigns giftees to users" do
+      event.reload
       event.assign_giftees
       event.reload
       event.users.each do |user|
@@ -51,6 +53,7 @@ describe Event do
     end
     context "when a user does not have a giftee" do
       it "returns false" do
+        event.reload
         event.should_not be_assigned
       end
     end
