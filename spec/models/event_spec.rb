@@ -57,4 +57,11 @@ describe Event do
 
   end
 
+  it "validates unique user names" do
+    # params.require(:event).permit(:name, users_attributes: [:name, :id, :_destroy])
+    event = Event.new(:name => "An Event")
+    2.times { event.users.build(:name => "Foo") }
+    event.save.should be_false
+  end
+
 end

@@ -6,6 +6,8 @@ class Event < ActiveRecord::Base
 
   validates :name, presence: true, length: { maximum: 300 }
 
+  validates :users, :nested_attributes_uniqueness => {:field => :name}
+
   accepts_nested_attributes_for :users, reject_if: lambda { |a| a[:name].blank? }, allow_destroy: true
 
   def assign_giftees
