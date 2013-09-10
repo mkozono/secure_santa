@@ -30,7 +30,7 @@ class EventsController < ApplicationController
 
   def create
     begin
-      @event = Event.new(event_params)
+      @event = Event.new(create_params)
     rescue ActionController::ParameterMissing => e
       Rails.logger.info "Parameter missing during event create. #{params}"
       return head(:bad_request)
@@ -51,7 +51,7 @@ class EventsController < ApplicationController
 
   def update
     @event = Event.find(params[:id])
-    if @event.update_attributes(event_params)
+    if @event.update_users(update_users_params) && @event.update_attributes(update_event_params)
       redirect_to @event, notice: "Successfully updated event."
     else
       flash[:error] = "Unable to save edits."
@@ -84,8 +84,16 @@ class EventsController < ApplicationController
 
   private
 
-    def event_params
+    def create_params
       params.require(:event).permit(:name, users_attributes: [:name, :id, :_destroy])
+    end
+
+    def update_event_params
+      params.require(:event).permit(:name)
+    end
+
+    def update_users_params
+      params.require(:event).permit(users_attributes: [:name, :id, :_destroy])
     end
 
 end

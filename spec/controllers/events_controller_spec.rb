@@ -117,6 +117,27 @@ describe EventsController do
         put :update, id: @event, event: FactoryGirl.attributes_for(:event)
         response.should redirect_to @event
       end
+      context "with nested users attributes" do
+        it "updates users" do
+          FactoryGirl.create(:user, event: @event, name: "An Old Name")
+          @event.reload
+          put :update, id: @event, event: { users_attributes: {"0" => {"id" => @event.users.first.id, "name" => "A New Name"}} }
+          @event.reload
+          @event.users.first.name.should eq("A New Name")
+        end
+        it "creates users" do
+          put :update, id: @event, event: { users_attributes: {"0" => {"id" => "123456789", "name" => "Some Name"}} }
+          @event.reload
+          @event.users.size.should == 1
+        end
+        it "destroys users" do
+          FactoryGirl.create(:user, event: @event, name: "To Be Destroyed")
+          @event.reload
+          put :update, id: @event, event: { users_attributes: {"0" => {"id" => @event.users.first.id, "_destroy" => "true"}} }
+          @event.reload
+          @event.users.size.should == 0
+        end
+      end
     end
     
     context "invalid attributes" do
