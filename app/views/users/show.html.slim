@@ -1,0 +1,16 @@
+h3
+  | Event 
+  = link_to "#{@user.event.name}", @user.event
+
+h3
+  | Secret Santa assignment for 
+  = @user.name
+
+= render "shared/flash_messages"
+
+h2
+  - if @user.giftee
+    | You are giving to 
+    = "#{@user.giftee.name}!"
+  - else
+    | You are not someone's secret santa!  Check with event admin.
