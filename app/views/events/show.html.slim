@@ -11,15 +11,16 @@ ol
     li
       = user.name
 
-.assignments
-  - if @event.assigned?
-    h3 Assignments
-    ol
-      - for user in @event.users.order("id asc")
-        li
-          = user.name
-          |  is giving to 
-          = user.giftee.name
+- if user_role == User::ROLE_SITE_ADMIN
+  .assignments
+    - if @event.assigned?
+      h3 Assignments
+      ol
+        - for user in @event.users.order("id asc")
+          li
+            = link_to user.name, event_user_path(@event, user)
+            |  is giving to 
+            = user.giftee.name
 
 .actions
   = form_for(@event, url: assign_giftees_event_path(@event)) do |f|
