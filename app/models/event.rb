@@ -47,7 +47,6 @@ class Event < ActiveRecord::Base
 
     users_attributes.each do |k, user_params|
       user = User.where(:id => user_params["id"]).last
-      pp user
       if user
         raise "Cannot update a user of a different event!" if user.event_id != self.id
         # Update
