@@ -12,4 +12,5 @@
     = link_to_add_fields("Add Invitee", f, :users).html_safe
 
   .actions style="margin-top: 15px; margin-bottom: 15px"
-    = f.submit class: "btn btn-primary btn-medium"
+    = f.submit class: "btn btn-primary"
+    = link_to "Cancel", @event, class: "btn"
