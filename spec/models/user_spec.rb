@@ -2,20 +2,28 @@ require 'spec_helper'
 
 describe User do
 
-  it "has a valid factory" do
-    FactoryGirl.create(:user).should be_valid
-  end
+  describe "validations" do
+    it "has a valid factory" do
+      FactoryGirl.create(:user).should be_valid
+    end
 
-  it "is invalid without a name" do
-    FactoryGirl.build(:user, name: nil).should_not be_valid
-  end
+    it "is invalid without a name" do
+      FactoryGirl.build(:user, name: nil).should_not be_valid
+    end
 
-  it "is invalid with a name over 400 characters" do
-    FactoryGirl.build(:user, name: "!"*401).should_not be_valid
-  end
+    it "is invalid with a name over 400 characters" do
+      FactoryGirl.build(:user, name: "!"*401).should_not be_valid
+    end
 
-  it "is invalid without an event" do
-    FactoryGirl.build(:user, event: nil).should_not be_valid
+    it "is invalid without an event" do
+      FactoryGirl.build(:user, event: nil).should_not be_valid
+    end
+
+    specify "name must be unique per event" do
+      event = FactoryGirl.create(:event)
+      FactoryGirl.create(:user, name: "Bob", event: event)
+      FactoryGirl.build(:user, name: "Bob", event: event).should_not be_valid
+    end
   end
 
   describe "giftee" do
@@ -47,10 +55,19 @@ describe User do
     end
   end
 
-  specify "name must be unique per event" do
-    event = FactoryGirl.create(:event)
-    FactoryGirl.create(:user, name: "Bob", event: event)
-    FactoryGirl.build(:user, name: "Bob", event: event).should_not be_valid
+  describe "#unique_admin_uid" do
+    let(:user) { FactoryGirl.build(:user) }
+    it "returns a random number within the max_uid" do
+      expect(user.unique_uid(10000000)).to match /\A\d{7}\z/
+    end
+    context "when all ids are taken except one" do
+      before do
+        User.stub("pluck").with(:uid).and_return(["0","1","2","3","4","5","6","7","8"])
+      end
+      it "returns the remaining id" do
+        expect(user.unique_uid(10)).to eq("9")
+      end
+    end
   end
 
 end

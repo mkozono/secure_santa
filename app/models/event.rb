@@ -75,7 +75,7 @@ class Event < ActiveRecord::Base
   end
 
   def unique_admin_uid(max_uid)
-    all_uids = Event.pluck(:admin_uid)
+    all_uids = self.class.pluck(:admin_uid)
     tries = 10000
     digits = (max_uid - 1).to_s.size
     temp_uid = nil
