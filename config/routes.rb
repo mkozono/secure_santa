@@ -2,11 +2,14 @@ SecureSanta::Application.routes.draw do
 
   root :to => 'events#new'
 
-  resources :events do
+  get 'e/:admin_uid', to: 'events#show_admin', as: 'event_admin'
+  get 'e/:admin_uid/edit', to: 'events#edit', as: 'edit_event'
+  patch 'e/:admin_uid', to: 'events#update'
+  delete 'e/:admin_uid', to: 'events#destroy'
+  patch 'e/:admin_uid/assign_giftees', to: 'events#assign_giftees', as: 'assign_giftees_event'
+
+  resources :events, :only => [:index, :show, :new, :create] do
     resources :users
-    member do
-      patch :assign_giftees
-    end
   end
 
   # The priority is based upon order of creation:

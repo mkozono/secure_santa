@@ -2,16 +2,24 @@ require 'spec_helper'
 
 describe Event do
   
-  it "has a valid factory" do
-    FactoryGirl.create(:event).should be_valid
-  end
+  describe "validations" do
+    it "has a valid factory" do
+      FactoryGirl.create(:event).should be_valid
+    end
 
-  it "is invalid without a name" do
-    FactoryGirl.build(:event, name: nil).should_not be_valid
-  end
+    it "is invalid without a name" do
+      FactoryGirl.build(:event, name: nil).should_not be_valid
+    end
 
-  it "is invalid with a name over 300 characters" do
-    FactoryGirl.build(:event, name: "!"*301).should_not be_valid
+    it "is invalid with a name over 300 characters" do
+      FactoryGirl.build(:event, name: "!"*301).should_not be_valid
+    end
+
+    it "validates unique user names" do
+      event = Event.new(:name => "An Event")
+      2.times { event.users.build(:name => "Foo") }
+      event.save.should be_false
+    end
   end
 
   describe "#destroy" do
@@ -57,14 +65,29 @@ describe Event do
         event.should_not be_assigned
       end
     end
-
   end
 
-  it "validates unique user names" do
-    # params.require(:event).permit(:name, users_attributes: [:name, :id, :_destroy])
-    event = Event.new(:name => "An Event")
-    2.times { event.users.build(:name => "Foo") }
-    event.save.should be_false
+  describe "#unique_admin_uid" do
+    let(:event) { FactoryGirl.build(:event) }
+    it "returns a random number within the max_uid" do
+      expect(event.unique_admin_uid(10000000)).to match /\A\d{7}\z/
+    end
+    context "when all ids are taken except one" do
+      before do
+        Event.stub("pluck").with(:admin_uid).and_return(["0","1","2","3","4","5","6","7","8"])
+      end
+      it "returns the remaining id" do
+        expect(event.unique_admin_uid(10)).to eq("9")
+      end
+    end
+  end
+
+  describe "#create" do
+    it "calls set_admin_uid" do
+      event = FactoryGirl.build(:event)
+      event.should_receive(:set_admin_uid)
+      event.save
+    end
   end
 
 end

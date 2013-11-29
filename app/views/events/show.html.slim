@@ -1,9 +1,11 @@
-h1 Event Details
-
 = render "shared/flash_messages"
 
-h2 Event Name
-= @event.name
+h2
+  | Event 
+  = @event.name
+
+- if @event.assigned?
+  p Everyone is assigned a secret santa!
 
 h2 Invitees
 ol
@@ -22,11 +24,12 @@ ol
             |  is giving to 
             = user.giftee.name
 
-.actions
-  = form_for(@event, url: assign_giftees_event_path(@event)) do |f|
-    = f.submit value: "Assign Giftees", class: "btn btn-primary"
+- if user_role == User::ROLE_EVENT_ADMIN
+  .actions
+    = form_for(@event, url: assign_giftees_event_path(@event.admin_uid)) do |f|
+      = f.submit value: "Assign Giftees", class: "btn btn-primary"
 
-  = link_to("Edit Event", edit_event_path(@event), class: "btn")
+    = link_to("Edit Event", edit_event_path(@event.admin_uid), class: "btn")
 
-  = form_for(@event, html: { method: :delete }) do |f|
-    = f.submit value: "Delete Event", class: "btn btn-danger"
+    = form_for(@event, url: event_admin_path(@event.admin_uid), html: { method: :delete }) do |f|
+      = f.submit value: "Delete Event", class: "btn btn-danger"
