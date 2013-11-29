@@ -5,10 +5,11 @@ class Event < ActiveRecord::Base
   has_many :users, inverse_of: :event, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 300 }
-
   validates :users, :nested_attributes_uniqueness => {:field => :name}
 
   accepts_nested_attributes_for :users, reject_if: lambda { |a| a[:name].blank? }, allow_destroy: true
+
+  before_create :set_admin_uid
 
   def assign_giftees
     assigner = SecureSanta::Assigner.new users.to_a
@@ -67,6 +68,25 @@ class Event < ActiveRecord::Base
         user_params["_destroy"] = "true"
       end
     end
+  end
+
+  def set_admin_uid
+    self.admin_uid = unique_admin_uid(10000000)
+  end
+
+  def unique_admin_uid(max_uid)
+    all_uids = Event.pluck(:admin_uid)
+    tries = 10000
+    digits = (max_uid - 1).to_s.size
+    temp_uid = nil
+    until (temp_uid && !all_uids.include?(temp_uid))
+      temp_uid = rand(max_uid).to_s.rjust(digits, "0")
+      tries -= 1
+      if tries <= 0
+        raise StandardError, "Too many events for UID range"
+      end
+    end
+    temp_uid
   end
 
 end
