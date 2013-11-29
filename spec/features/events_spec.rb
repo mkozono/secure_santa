@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 feature "Viewing all events", :js => true do
-  # let(:events) { [FactoryGirl.create(:event_with_users), FactoryGirl.create(:event_with_users)] }
   background do
     @events = [Event.create!(:name => "Foo"), Event.create!(:name => "Bar")]
     visit events_path
@@ -63,7 +62,7 @@ end
 feature "Editing an event", :js => true do
   let(:event) { FactoryGirl.create(:event_with_users) }
   background do
-    visit edit_event_path(event)
+    visit edit_event_path(event.admin_uid)
   end
 
   scenario "Existing event information is displayed" do
@@ -95,7 +94,7 @@ end
 feature "Deleting an event", :js => true do
   let(:event) { FactoryGirl.create(:event_with_users) }
   background do
-    visit event_path(event)
+    visit event_admin_path(event.admin_uid)
   end
 
   scenario "Clicking delete button" do

@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
 
   ROLE_ANONYMOUS = :anonymous
+  ROLE_EVENT_ADMIN = :event_admin
   ROLE_SITE_ADMIN = :site_admin
   
   belongs_to :event, inverse_of: :users

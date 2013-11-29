@@ -12,8 +12,22 @@ class EventsController < ApplicationController
   def show
     @event = Event.find_by_id(params[:id])
     if @event.nil?
-      flash[:notice] = "Could not find event with that ID."
-      redirect_to events_path
+      redirect_to events_path, notice: "Could not find event." and return
+    else
+      if @event.admin_uid.blank?
+        promote_to_event_admin
+      else
+        render :show
+      end
+    end
+  end
+
+  def show_admin
+    @event = Event.find_by_admin_uid(params[:admin_uid])
+    if @event.nil?
+      redirect_to events_path, notice: "Could not find event." and return
+    else
+      render :show
     end
   end
 
@@ -37,8 +51,8 @@ class EventsController < ApplicationController
     end
 
     if @event && @event.save
-      flash[:notice] = "Successfully created event."
-      redirect_to @event
+      flash[:notice] = "Successfully created event.  Bookmark this page if you want to be able to edit it later!"
+      redirect_to event_admin_path(@event.admin_uid)
     else
       flash[:error] = "Unable to create event."
       render :new
@@ -46,13 +60,16 @@ class EventsController < ApplicationController
   end
 
   def edit
-    @event = Event.find(params[:id])
+    @event = Event.find_by_admin_uid(params[:admin_uid])
+    if @event.nil?
+      redirect_to events_path, error: "Could not find event." and return
+    end
   end
 
   def update
-    @event = Event.find(params[:id])
+    @event = Event.find_by_admin_uid(params[:admin_uid])
     if @event.update_users(update_users_params) && @event.update_attributes(update_event_params)
-      redirect_to @event, notice: "Successfully updated event."
+      redirect_to event_admin_path(@event.admin_uid), notice: "Successfully updated event."
     else
       flash[:error] = "Unable to save edits."
       render :edit
@@ -60,7 +77,7 @@ class EventsController < ApplicationController
   end
 
   def destroy
-    @event = Event.find_by_id(params[:id])
+    @event = Event.find_by_admin_uid(params[:admin_uid])
     if @event
       @event.destroy
       flash[:notice] = "Successfully deleted event."
@@ -71,14 +88,14 @@ class EventsController < ApplicationController
   end
 
   def assign_giftees
-    @event = Event.find(params[:id])
+    @event = Event.find_by_admin_uid(params[:admin_uid])
     begin
       @event.assign_giftees
-      redirect_to @event
+      redirect_to event_admin_path(@event.admin_uid)
     rescue Exception => e
       Rails.logger.error e.inspect
       Rails.logger.error e.backtrace
-      redirect_to @event, notice: "There was an error while assigning giftees."
+      redirect_to event_admin_path(@event.admin_uid), notice: "There was an error while assigning giftees."
     end
   end
 
@@ -94,6 +111,13 @@ class EventsController < ApplicationController
 
     def update_users_params
       params.require(:event).permit(users_attributes: [:name, :id, :_destroy])
+    end
+
+    def promote_to_event_admin
+      @event.set_admin_uid
+      @event.save!
+      flash[:notice] = "You are now the event administrator.  Bookmark this page since there is no other way to edit the event later."
+      redirect_to event_admin_path(@event.admin_uid) and return
     end
 
 end
