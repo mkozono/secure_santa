@@ -6,6 +6,8 @@ h2
 
 - if @event.assigned?
   p Everyone is assigned a secret santa!
+- else
+  p Not everyone has a secret santa!
 
 h2 Invitees
 ol
@@ -20,7 +22,7 @@ ol
         - if [User::ROLE_SITE_ADMIN, User::ROLE_EVENT_ADMIN].include?(user_role)
           = form_for(user, url: reset_user_path(@event.admin_uid, user.uid), html: {method: "PATCH", style: "display:inline"}) do |f|
             |  - 
-            = f.submit "Reset this user's Secret Santa page", class: "btn btn-link", style: "display:inline;padding:0;background:none", onclick: "confirm('Are you sure you want to reset #{user.name}?')"
+            = f.submit "Reset this user's secret link", class: "btn btn-link", style: "display:inline;padding:0;background:none", onclick: "confirm('Are you sure you want to reset #{user.name}?')"
 
 - if user_role == User::ROLE_SITE_ADMIN
   .assignments
@@ -29,11 +31,11 @@ ol
       ol
         - for user in @event.users.order("id asc")
           li
-            = link_to user.name, event_user_path(@event, user)
+            = link_to user.name, user.uid ? verified_user_path(user.uid) : event_user_path(@event, user)
             |  is giving to 
             = user.giftee.name
 
-- if user_role == User::ROLE_EVENT_ADMIN
+- if [User::ROLE_SITE_ADMIN, User::ROLE_EVENT_ADMIN].include?(user_role)
   .actions
     = form_for(@event, url: assign_giftees_event_path(@event.admin_uid)) do |f|
       = f.submit value: "Assign Giftees", class: "btn btn-primary"
