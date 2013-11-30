@@ -7,6 +7,7 @@ SecureSanta::Application.routes.draw do
   patch 'e/:admin_uid', to: 'events#update'
   delete 'e/:admin_uid', to: 'events#destroy'
   patch 'e/:admin_uid/assign_giftees', to: 'events#assign_giftees', as: 'assign_giftees_event'
+  patch 'e/:admin_uid/u/:uid/reset_user', to: 'users#reset_user', as: 'reset_user'
 
   get 'u/:uid', to: 'users#show_verified', as: 'verified_user'
   patch 'events/:event_id/users/:id/confirm', to: 'users#confirm', as: 'confirm_event_user'

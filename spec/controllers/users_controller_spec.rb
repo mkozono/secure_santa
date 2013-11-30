@@ -52,4 +52,13 @@ describe UsersController do
     end
   end
 
+  describe "PATCH #reset_user" do
+    it "clears the uid" do
+      user = FactoryGirl.create(:user, uid: "1234567")
+      patch :reset_user, admin_uid: user.event.admin_uid, uid: "1234567"
+      user.reload
+      user.uid.should be_blank
+    end
+  end
+
 end
