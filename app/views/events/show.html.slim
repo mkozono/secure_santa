@@ -12,6 +12,15 @@ ol
   - for user in @event.users.order("id asc")
     li
       = user.name
+      |  - 
+      - if user.uid.blank?
+        = link_to "Claim this user", event_user_path(@event.id, user.id)
+      - else
+        | This user has already been claimed
+        - if [User::ROLE_SITE_ADMIN, User::ROLE_EVENT_ADMIN].include?(user_role)
+          = form_for(user, url: reset_user_path(@event.admin_uid, user.uid), html: {method: "PATCH", style: "display:inline"}) do |f|
+            |  - 
+            = f.submit "Reset this user's Secret Santa page", class: "btn btn-link", style: "display:inline;padding:0;background:none", onclick: "confirm('Are you sure you want to reset #{user.name}?')"
 
 - if user_role == User::ROLE_SITE_ADMIN
   .assignments

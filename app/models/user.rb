@@ -14,6 +14,25 @@ class User < ActiveRecord::Base
   validate :giftee_same_event, if: lambda { giftee.present? }
   validates_uniqueness_of :name, scope: :event_id, message: "cannot be the same as another user in the event."
 
+  def set_uid
+    self.uid = unique_uid(10000000)
+  end
+
+  def unique_uid(max_uid)
+    all_uids = self.class.pluck(:uid)
+    tries = 10000
+    digits = (max_uid - 1).to_s.size
+    temp_uid = nil
+    until (temp_uid && !all_uids.include?(temp_uid))
+      temp_uid = rand(max_uid).to_s.rjust(digits, "0")
+      tries -= 1
+      if tries <= 0
+        raise StandardError, "Too many users for UID range"
+      end
+    end
+    temp_uid
+  end
+
   private
 
     def giftee_same_event
