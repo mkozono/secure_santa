@@ -4,7 +4,7 @@ h3
   | Event 
   = link_to "#{@user.event.name}", @user.event
 
-h3
+h4
   | Secret Santa assignment for 
   = @user.name
 
@@ -14,3 +14,13 @@ h2
     = "#{@user.giftee.name}!"
   - else
     | You are not someone's secret santa!  Check with event admin.
+
+- if @user.giftee && @user.giftee.message.present?
+  h4 Message from your giftee:
+  = text_area_tag "giftee_message", @user.giftee.message, style: "width:300px;height:120px"
+
+h4 Write a message or wishlist to your secret santa:
+= form_for(@user, url: verified_user_path(@user.uid), html: {method: "PATCH"}) do |f|
+  = f.text_area :message, value: @user.message, style: "width:300px;height:120px"
+  br
+  = f.submit "Update message"

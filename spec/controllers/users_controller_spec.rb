@@ -61,4 +61,18 @@ describe UsersController do
     end
   end
 
+  describe "PATCH #update_verified" do
+    it "updates the message" do
+      user = FactoryGirl.create(:user, uid: "1234567")
+      patch :update_verified, uid: "1234567", user: { message: "User's message to their Secret Santa" }
+      user.reload
+      user.message.should be_present
+    end
+    it "redirects to verified_user show page" do
+      user = FactoryGirl.create(:user, uid: "1234567")
+      patch :update_verified, uid: "1234567", user: { message: "User's message to their Secret Santa" }
+      response.should redirect_to verified_user_path("1234567")
+    end
+  end
+
 end

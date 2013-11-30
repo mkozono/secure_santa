@@ -32,6 +32,7 @@ class UsersController < ApplicationController
       if user.uid.blank?
         user.set_uid
         user.save!
+        flash[:notice] = "Bookmark this secret page, there is no other way to get to it later!"
         redirect_to verified_user_path(user.uid) and return
       else
         redirect_to user.event, notice: "User #{user.name} has already claimed their secret page!" and return
@@ -48,5 +49,21 @@ class UsersController < ApplicationController
       redirect_to event_admin_path(event.admin_uid)
     end
   end
+
+  def update_verified
+    user = User.find_by_uid(params[:uid])
+    if user.update_attributes(update_params)
+      redirect_to verified_user_path(user.uid), notice: "Successfully updated user." and return
+    else
+      flash[:error] = "Unable to save edits."
+      render :show_verified
+    end
+  end
+
+  private
+
+    def update_params
+      params.require(:user).permit(:message)
+    end
 
 end
