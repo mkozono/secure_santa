@@ -8,8 +8,11 @@ SecureSanta::Application.routes.draw do
   delete 'e/:admin_uid', to: 'events#destroy'
   patch 'e/:admin_uid/assign_giftees', to: 'events#assign_giftees', as: 'assign_giftees_event'
 
+  get 'u/:uid', to: 'users#show_verified', as: 'verified_user'
+  patch 'events/:event_id/users/:id/confirm', to: 'users#confirm', as: 'confirm_event_user'
+
   resources :events, :only => [:index, :show, :new, :create] do
-    resources :users
+    resources :users, :only => [:show, :show_verified]
   end
 
   # The priority is based upon order of creation:

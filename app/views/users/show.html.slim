@@ -4,13 +4,7 @@ h3
   | Event 
   = link_to "#{@user.event.name}", @user.event
 
-h3
-  | Secret Santa assignment for 
-  = @user.name
+= form_for(@user, url: confirm_event_user_path(@user.event_id, @user.id), html: {method: "PATCH"}) do |f|
+  = f.submit "I am #{@user.name}, take me to my Secret Santa page and block anyone else from using this page.", class: 'btn btn-primary'
 
-h2
-  - if @user.giftee
-    | You are giving to 
-    = "#{@user.giftee.name}!"
-  - else
-    | You are not someone's secret santa!  Check with event admin.
+= link_to "I am not #{@user.name}, take me back to the event page.", @user.event, class: 'btn btn-default'
