@@ -4,10 +4,13 @@ h2
   | Event 
   = @event.name
 
-- if @event.assigned?
-  p Everyone is assigned a secret santa!
+- if @event.users.any?
+  - if @event.assigned?
+    p Everyone is assigned a secret santa!
+  - else
+    p Not everyone has a secret santa!
 - else
-  p Not everyone has a secret santa!
+  p Click "Edit Event" to add users!
 
 h2 Invitees
 ol
