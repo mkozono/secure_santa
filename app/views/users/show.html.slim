@@ -5,6 +5,6 @@ h3
   = link_to "#{@user.event.name}", @user.event
 
 = form_for(@user, url: confirm_event_user_path(@user.event_id, @user.id), html: {method: "PATCH"}) do |f|
-  = f.submit "I am #{@user.name}, take me to my Secret Santa page and block anyone else from using this page.  (This cannot be undone)", class: 'btn btn-primary'
+  = f.submit "I am #{@user.name}, take me to my Secret Santa page and block anyone else from using this page.  (This cannot be undone)", class: 'btn btn-primary', style: "white-space:normal"
 
 = link_to "I am not #{@user.name}, take me back to the event page.", @user.event, class: 'btn btn-default'
