@@ -51,14 +51,16 @@ class Event < ActiveRecord::Base
 
     users_attributes.each do |k, user_params|
       user = User.where(:id => user_params["id"]).last
-      if user
-        raise "Cannot update a user of a different event!" if user.event_id != self.id
-        # Update
-        user.name = user_params["name"]
-        user.save!
-      else
-        # Create
-        User.create!(:event => self, :name => user_params["name"])
+      if user_params && user_params["name"].present?
+        if user
+          raise "Cannot update a user of a different event!" if user.event_id != self.id
+          # Update
+          user.name = user_params["name"].strip
+          user.save!
+        else
+          # Create
+          User.create!(:event => self, :name => user_params["name"].strip)
+        end
       end
     end
 
