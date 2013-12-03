@@ -67,8 +67,16 @@ class EventsController < ApplicationController
   end
 
   def update
+    success = true
     @event = Event.find_by_admin_uid(params[:admin_uid])
-    if @event.update_users(update_users_params) && @event.update_attributes(update_event_params)
+    users_attributes = update_users_params["users_attributes"]
+    if users_attributes
+      users_attributes = mark_blank_name_deleted users_attributes
+      success = @event.destroy_users!(users_attributes)
+      success = @event.create_or_update_users(users_attributes) if success
+    end
+    success = @event.update_attributes(update_event_params) if success
+    if success
       redirect_to event_admin_path(@event.admin_uid), notice: "Successfully updated event."
     else
       flash[:error] = "Unable to save edits."
@@ -118,6 +126,15 @@ class EventsController < ApplicationController
       @event.save!
       flash[:notice] = "You are now the event administrator.  Bookmark this page since there is no other way to edit the event later."
       redirect_to event_admin_path(@event.admin_uid) and return
+    end
+
+    def mark_blank_name_deleted users_attributes
+      users_attributes.each do |k, user_params|
+        if user_params["name"].blank?
+          user_params["_destroy"] = "true"
+        end
+      end
+      users_attributes
     end
 
 end

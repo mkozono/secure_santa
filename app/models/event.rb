@@ -26,11 +26,8 @@ class Event < ActiveRecord::Base
     true
   end
 
-  def update_users(params)
-    users_attributes = params["users_attributes"]
+  def destroy_users!(users_attributes)
     return true unless users_attributes
-
-    users_attributes = mark_blank_name_deleted users_attributes
 
     # Must destroy any users marked for destruction before other updates to avoid complicated validations
     destroy_keys = []
@@ -46,6 +43,12 @@ class Event < ActiveRecord::Base
 
     users_attributes.delete_if { |k| destroy_keys.include? k }
 
+    true
+  end
+
+  def create_or_update_users(users_attributes)
+    return true unless users_attributes
+
     users_attributes.each do |k, user_params|
       user = User.where(:id => user_params["id"]).last
       if user
@@ -60,14 +63,6 @@ class Event < ActiveRecord::Base
     end
 
     true
-  end
-
-  def mark_blank_name_deleted users_attributes
-    users_attributes.each do |k, user_params|
-      if user_params["name"].blank?
-        user_params["_destroy"] = "true"
-      end
-    end
   end
 
   def set_admin_uid
