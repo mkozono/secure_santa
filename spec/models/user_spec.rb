@@ -70,4 +70,13 @@ describe User do
     end
   end
 
+  describe "attributes" do
+    describe "message" do
+      let(:user) { FactoryGirl.build(:user) }
+      it "can handle long values" do
+        user.update_attributes(:message => "10 chars. " * 1000).should be_true
+      end
+    end
+  end
+
 end
