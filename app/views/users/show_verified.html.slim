@@ -17,7 +17,7 @@ h2
 
 - if @user.giftee && @user.giftee.message.present?
   h4 Message from your giftee:
-  = text_area_tag "giftee_message", @user.giftee.message, style: "width:300px;height:120px"
+  = text_area_tag "giftee_message", @user.giftee.message, style: "width:300px;height:120px", disabled: true
 
 h4 Write a message or wishlist to your secret santa:
 = form_for(@user, url: verified_user_path(@user.uid), html: {method: "PATCH"}) do |f|
