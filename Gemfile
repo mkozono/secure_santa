@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.1.1'
 gem "rails", "~> 4.0.0"
 
 gem 'therubyracer'
@@ -20,7 +20,7 @@ gem 'newrelic_rpm'
 group :development, :test do
   gem 'rspec-rails', '~> 2.14.0'
   gem 'factory_girl_rails', '~> 4.2.1'
-  gem 'guard-spork', '~> 1.5.1'  
+  gem 'guard-spork', '~> 1.5.1'
   gem 'spork', '~> 0.9.2'
   gem 'travis-lint', :require => false
   gem 'coveralls', :require => false
