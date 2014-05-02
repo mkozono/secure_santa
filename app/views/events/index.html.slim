@@ -6,6 +6,6 @@ ul#events
   - for event in @events
     li
       = link_to event.name, event
-      - if user_role == User::ROLE_SITE_ADMIN && event.admin_uid.present?
+      - if player_role == Player::ROLE_SITE_ADMIN && event.admin_uid.present?
         |  - 
         = link_to "Admin page", event_admin_path(event.admin_uid)

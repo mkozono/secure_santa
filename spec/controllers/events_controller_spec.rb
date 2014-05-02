@@ -48,8 +48,8 @@ describe EventsController do
     it "renders the :new template" do
       response.should render_template :new
     end
-    it "assigns at least one blank user to the new event" do
-      assigns(:event).users.size.should > 1
+    it "assigns at least one blank player to the new event" do
+      assigns(:event).players.size.should > 1
     end
   end
 
@@ -111,58 +111,58 @@ describe EventsController do
     before do
       @event = FactoryGirl.create(:event, name: "My Event")
     end
-    
+
     context "valid attributes" do
       it "located the requested @event" do
         put :update, admin_uid: @event.admin_uid, event: FactoryGirl.attributes_for(:event)
-        assigns(:event).should eq(@event)      
+        assigns(:event).should eq(@event)
       end
-    
+
       it "changes @event's attributes" do
         put :update, admin_uid: @event.admin_uid, event: FactoryGirl.attributes_for(:event, name: "Different Event Name")
         @event.reload
         @event.name.should eq("Different Event Name")
       end
-    
+
       it "redirects to the updated event" do
         put :update, admin_uid: @event.admin_uid, event: FactoryGirl.attributes_for(:event)
         response.should redirect_to event_admin_path(@event.admin_uid)
       end
-      context "with nested users attributes" do
-        it "updates users" do
-          FactoryGirl.create(:user, event: @event, name: "An Old Name")
+      context "with nested players attributes" do
+        it "updates players" do
+          FactoryGirl.create(:player, event: @event, name: "An Old Name")
           @event.reload
-          put :update, admin_uid: @event.admin_uid, event: { users_attributes: {"0" => {"id" => @event.users.first.id, "name" => "A New Name"}} }
+          put :update, admin_uid: @event.admin_uid, event: { players_attributes: {"0" => {"id" => @event.players.first.id, "name" => "A New Name"}} }
           @event.reload
-          @event.users.first.name.should eq("A New Name")
+          @event.players.first.name.should eq("A New Name")
         end
-        it "creates users" do
-          put :update, admin_uid: @event.admin_uid, event: { users_attributes: {"0" => {"id" => "123456789", "name" => "Some Name"}} }
+        it "creates players" do
+          put :update, admin_uid: @event.admin_uid, event: { players_attributes: {"0" => {"id" => "123456789", "name" => "Some Name"}} }
           @event.reload
-          @event.users.size.should == 1
+          @event.players.size.should == 1
         end
-        it "destroys users" do
-          FactoryGirl.create(:user, event: @event, name: "To Be Destroyed")
+        it "destroys players" do
+          FactoryGirl.create(:player, event: @event, name: "To Be Destroyed")
           @event.reload
-          put :update, admin_uid: @event.admin_uid, event: { users_attributes: {"0" => {"id" => @event.users.first.id, "_destroy" => "true"}} }
+          put :update, admin_uid: @event.admin_uid, event: { players_attributes: {"0" => {"id" => @event.players.first.id, "_destroy" => "true"}} }
           @event.reload
-          @event.users.size.should == 0
+          @event.players.size.should == 0
         end
       end
     end
-    
+
     context "invalid attributes" do
       it "locates the requested @event" do
         put :update, admin_uid: @event.admin_uid, event: FactoryGirl.attributes_for(:event, :invalid)
-        assigns(:event).should eq(@event)      
+        assigns(:event).should eq(@event)
       end
-      
+
       it "does not change @event's attributes" do
         put :update, admin_uid: @event.admin_uid, event: FactoryGirl.attributes_for(:event, name: nil)
         @event.reload
         @event.name.should_not eq(nil)
       end
-      
+
       it "re-renders the edit method" do
         put :update, admin_uid: @event.admin_uid, event: FactoryGirl.attributes_for(:event, :invalid)
         response.should render_template :edit
@@ -175,13 +175,13 @@ describe EventsController do
       before :each do
         @event = FactoryGirl.create(:event)
       end
-      
+
       it "deletes the event" do
         expect{
           delete :destroy, admin_uid: @event.admin_uid
         }.to change(Event,:count).by(-1)
       end
-        
+
       it "redirects to events#index" do
         delete :destroy, admin_uid: @event.admin_uid
         response.should redirect_to events_url
@@ -197,11 +197,11 @@ describe EventsController do
 
   describe 'PUT #assign_giftees' do
     context "when the event is ready for assignment" do
-      let(:event) { FactoryGirl.create(:event_with_users, users_count: 3) }
+      let(:event) { FactoryGirl.create(:event_with_players, players_count: 3) }
       it "assigns giftees" do
         put :assign_giftees, admin_uid: event.admin_uid
-        event.users.each do |user|
-          user.giftee.should be_present
+        event.players.each do |player|
+          player.giftee.should be_present
         end
       end
       it "redirects to show the event" do
@@ -210,11 +210,11 @@ describe EventsController do
       end
     end
     context "when the event is not ready for assignment" do
-      let(:event) { FactoryGirl.create(:event_with_users, users_count: 2) }
+      let(:event) { FactoryGirl.create(:event_with_players, players_count: 2) }
       it "does not assign giftees" do
         put :assign_giftees, admin_uid: event.admin_uid
-        event.users.each do |user|
-          user.giftee.should be_nil
+        event.players.each do |player|
+          player.giftee.should be_nil
         end
       end
       it "redirects to show the event" do

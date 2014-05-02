@@ -14,13 +14,13 @@ feature "Viewing all events", :js => true do
 end
 
 feature "Viewing an event", :js => true do
-  let(:event) { FactoryGirl.create(:event_with_users) }
+  let(:event) { FactoryGirl.create(:event_with_players) }
 
   scenario "Event information is displayed" do
     visit event_path(event)
     page.should have_content(event.name)
-    event.users.each do |user|
-      page.should have_content(user.name)
+    event.players.each do |player|
+      page.should have_content(player.name)
     end
   end
 
@@ -43,12 +43,12 @@ feature "Creating a new event", :js => true do
 
   scenario "Submitting valid data" do
     fill_in "Event Name", :with => Faker::Company.catch_phrase
-    find(:css, "input[id='event_users_attributes_0_name']").set(Faker::Name.name)
-    find(:css, "input[id='event_users_attributes_1_name']").set(Faker::Name.name)
+    find(:css, "input[id='event_players_attributes_0_name']").set(Faker::Name.name)
+    find(:css, "input[id='event_players_attributes_1_name']").set(Faker::Name.name)
     click_on "Create Event"
     page.body.should match "Success" # Hack: The form doesn't seem to be submitted until we access page
     Event.count.should == 1
-    User.count.should == 2
+    Player.count.should == 2
   end
 
   scenario "submitting invalid data" do
@@ -60,26 +60,26 @@ feature "Creating a new event", :js => true do
 end
 
 feature "Editing an event", :js => true do
-  let(:event) { FactoryGirl.create(:event_with_users) }
+  let(:event) { FactoryGirl.create(:event_with_players) }
   background do
     visit edit_event_path(event.admin_uid)
   end
 
   scenario "Existing event information is displayed" do
     page.body.should match event.name
-    event.users.each do |user|
-      page.body.should match user.name
+    event.players.each do |player|
+      page.body.should match player.name
     end
   end
 
   scenario "Submitting valid data" do
     fill_in "Event Name", :with => "New Event Name"
-    find(:css, "input[id='event_users_attributes_0_name']").set("New User Name")
+    find(:css, "input[id='event_players_attributes_0_name']").set("New Player Name")
     click_on "Update Event"
     page.body.should match "Success" # Hack: The form doesn't seem to be submitted until we access page
     event.reload
     event.name.should == "New Event Name"
-    event.users.map{|u|u.name}.should include "New User Name"
+    event.players.map{|u|u.name}.should include "New Player Name"
   end
 
   scenario "submitting invalid data" do
@@ -92,7 +92,7 @@ feature "Editing an event", :js => true do
 end
 
 feature "Deleting an event", :js => true do
-  let(:event) { FactoryGirl.create(:event_with_users) }
+  let(:event) { FactoryGirl.create(:event_with_players) }
   background do
     visit event_admin_path(event.admin_uid)
   end

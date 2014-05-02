@@ -2,64 +2,64 @@ require 'secure_santa/assigner'
 
 class Event < ActiveRecord::Base
 
-  has_many :users, inverse_of: :event, dependent: :destroy
+  has_many :players, inverse_of: :event, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 300 }
-  validates :users, :nested_attributes_uniqueness => {:field => :name}
+  validates :players, :nested_attributes_uniqueness => {:field => :name}
 
-  accepts_nested_attributes_for :users, reject_if: lambda { |a| a[:name].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :players, reject_if: lambda { |a| a[:name].blank? }, allow_destroy: true
 
   before_create :set_admin_uid
 
   def assign_giftees
-    assigner = SecureSanta::Assigner.new users.to_a
+    assigner = SecureSanta::Assigner.new players.to_a
     assignments = assigner.assign_giftees
-    assignments.each do |user, giftee|
-      user.update_attributes!(:giftee_id => giftee.id)
+    assignments.each do |player, giftee|
+      player.update_attributes!(:giftee_id => giftee.id)
     end
   end
 
   def assigned?
-    users.each do |user|
-      return false if user.gifter.blank?
+    players.each do |player|
+      return false if player.gifter.blank?
     end
     true
   end
 
-  def destroy_users!(users_attributes)
-    return true unless users_attributes
+  def destroy_players!(players_attributes)
+    return true unless players_attributes
 
-    # Must destroy any users marked for destruction before other updates to avoid complicated validations
+    # Must destroy any players marked for destruction before other updates to avoid complicated validations
     destroy_keys = []
-    users_attributes.each do |k, user_params|
-      if ["true", "1"].include? user_params["_destroy"]
-        user = User.where(:id => user_params["id"]).last
-        if user && user.event_id == self.id
+    players_attributes.each do |k, player_params|
+      if ["true", "1"].include? player_params["_destroy"]
+        player = Player.where(:id => player_params["id"]).last
+        if player && player.event_id == self.id
           destroy_keys << k
-          user.destroy
+          player.destroy
         end
       end
     end
 
-    users_attributes.delete_if { |k| destroy_keys.include? k }
+    players_attributes.delete_if { |k| destroy_keys.include? k }
 
     true
   end
 
-  def create_or_update_users(users_attributes)
-    return true unless users_attributes
+  def create_or_update_players(players_attributes)
+    return true unless players_attributes
 
-    users_attributes.each do |k, user_params|
-      user = User.where(:id => user_params["id"]).last
-      if user_params && user_params["name"].present?
-        if user
-          raise "Cannot update a user of a different event!" if user.event_id != self.id
+    players_attributes.each do |k, player_params|
+      player = Player.where(:id => player_params["id"]).last
+      if player_params && player_params["name"].present?
+        if player
+          raise "Cannot update a player of a different event!" if player.event_id != self.id
           # Update
-          user.name = user_params["name"].strip
-          user.save!
+          player.name = player_params["name"].strip
+          player.save!
         else
           # Create
-          User.create!(:event => self, :name => user_params["name"].strip)
+          Player.create!(:event => self, :name => player_params["name"].strip)
         end
       end
     end

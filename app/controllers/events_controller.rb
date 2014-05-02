@@ -2,7 +2,7 @@ class EventsController < ApplicationController
 
   def index
     @events = Event.all
-   
+
     respond_to do |format|
       format.html
       format.json { render :json => @events }
@@ -34,8 +34,8 @@ class EventsController < ApplicationController
   def new
   	@event = Event.new
 
-    6.times { @event.users.build } # blank starting fields
- 
+    6.times { @event.players.build } # blank starting fields
+
     respond_to do |format|
       format.html
       format.json { render :json => @event }
@@ -69,11 +69,11 @@ class EventsController < ApplicationController
   def update
     success = true
     @event = Event.find_by_admin_uid(params[:admin_uid])
-    users_attributes = update_users_params["users_attributes"]
-    if users_attributes
-      users_attributes = mark_blank_name_deleted users_attributes
-      success = @event.destroy_users!(users_attributes)
-      success = @event.create_or_update_users(users_attributes) if success
+    players_attributes = update_players_params["players_attributes"]
+    if players_attributes
+      players_attributes = mark_blank_name_deleted players_attributes
+      success = @event.destroy_players!(players_attributes)
+      success = @event.create_or_update_players(players_attributes) if success
     end
     success = @event.update_attributes(update_event_params) if success
     if success
@@ -110,15 +110,15 @@ class EventsController < ApplicationController
   private
 
     def create_params
-      params.require(:event).permit(:name, users_attributes: [:name, :id, :_destroy])
+      params.require(:event).permit(:name, players_attributes: [:name, :id, :_destroy])
     end
 
     def update_event_params
       params.require(:event).permit(:name)
     end
 
-    def update_users_params
-      params.require(:event).permit(users_attributes: [:name, :id, :_destroy])
+    def update_players_params
+      params.require(:event).permit(players_attributes: [:name, :id, :_destroy])
     end
 
     def promote_to_event_admin
@@ -128,13 +128,13 @@ class EventsController < ApplicationController
       redirect_to event_admin_path(@event.admin_uid) and return
     end
 
-    def mark_blank_name_deleted users_attributes
-      users_attributes.each do |k, user_params|
-        if user_params["name"].blank?
-          user_params["_destroy"] = "true"
+    def mark_blank_name_deleted players_attributes
+      players_attributes.each do |k, player_params|
+        if player_params["name"].blank?
+          player_params["_destroy"] = "true"
         end
       end
-      users_attributes
+      players_attributes
     end
 
 end

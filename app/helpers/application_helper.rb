@@ -22,8 +22,8 @@ module ApplicationHelper
     f.hidden_field(:_destroy) + link_to("Remove", "javascript:void(0)", { class: "remove_field", tabindex: "-1" })
   end
 
-  def user_role
-    User::ROLE_ANONYMOUS
+  def player_role
+    Player::ROLE_ANONYMOUS
   end
-  
+
 end
