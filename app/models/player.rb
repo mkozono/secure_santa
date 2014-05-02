@@ -1,18 +1,18 @@
-class User < ActiveRecord::Base
+class Player < ActiveRecord::Base
 
   ROLE_ANONYMOUS = :anonymous
   ROLE_EVENT_ADMIN = :event_admin
   ROLE_SITE_ADMIN = :site_admin
-  
-  belongs_to :event, inverse_of: :users
 
-  belongs_to :gifter, class_name: "User", foreign_key: "giftee_id"
-  has_one :giftee, class_name: "User", foreign_key: "giftee_id"
+  belongs_to :event, inverse_of: :players
+
+  belongs_to :gifter, class_name: "Player", foreign_key: "giftee_id"
+  has_one :giftee, class_name: "Player", foreign_key: "giftee_id"
 
   validates :name, presence: true, length: { maximum: 400 }
   validates :event, presence: true
   validate :giftee_same_event, if: lambda { giftee.present? }
-  validates_uniqueness_of :name, scope: :event_id, message: "cannot be the same as another user in the event."
+  validates_uniqueness_of :name, scope: :event_id, message: "cannot be the same as another player in the event."
 
   def set_uid
     self.uid = unique_uid(10000000)
@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
       temp_uid = rand(max_uid).to_s.rjust(digits, "0")
       tries -= 1
       if tries <= 0
-        raise StandardError, "Too many users for UID range"
+        raise StandardError, "Too many players for UID range"
       end
     end
     temp_uid

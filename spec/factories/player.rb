@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :user do
+  factory :player do
     name { Faker::Name.name }
     event
 

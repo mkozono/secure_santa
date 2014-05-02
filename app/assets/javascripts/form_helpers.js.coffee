@@ -4,7 +4,7 @@ window.secureSanta.addField = (link, association, content) ->
   new_id = new Date().getTime()
   regex = new RegExp("new_#{association}", "g")
   content = content.replace(regex, new_id)
-  $("div.users").append(content)
+  $("div.players").append(content)
   secureSanta.bindRemoveFields()
 
 window.secureSanta.removeField = (link) ->

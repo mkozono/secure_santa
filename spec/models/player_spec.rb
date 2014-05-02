@@ -1,36 +1,36 @@
 require 'spec_helper'
 
-describe User do
+describe Player do
 
   describe "validations" do
     it "has a valid factory" do
-      FactoryGirl.create(:user).should be_valid
+      FactoryGirl.create(:player).should be_valid
     end
 
     it "is invalid without a name" do
-      FactoryGirl.build(:user, name: nil).should_not be_valid
+      FactoryGirl.build(:player, name: nil).should_not be_valid
     end
 
     it "is invalid with a name over 400 characters" do
-      FactoryGirl.build(:user, name: "!"*401).should_not be_valid
+      FactoryGirl.build(:player, name: "!"*401).should_not be_valid
     end
 
     it "is invalid without an event" do
-      FactoryGirl.build(:user, event: nil).should_not be_valid
+      FactoryGirl.build(:player, event: nil).should_not be_valid
     end
 
     specify "name must be unique per event" do
       event = FactoryGirl.create(:event)
-      FactoryGirl.create(:user, name: "Bob", event: event)
-      FactoryGirl.build(:user, name: "Bob", event: event).should_not be_valid
+      FactoryGirl.create(:player, name: "Bob", event: event)
+      FactoryGirl.build(:player, name: "Bob", event: event).should_not be_valid
     end
   end
 
   describe "giftee" do
     before do
       @christmas = FactoryGirl.create(:event)
-      @bob = FactoryGirl.create(:user, event: @christmas)
-      @sue = FactoryGirl.create(:user, event: @christmas)
+      @bob = FactoryGirl.create(:player, event: @christmas)
+      @sue = FactoryGirl.create(:player, event: @christmas)
     end
 
     it "can have a giftee" do
@@ -56,25 +56,25 @@ describe User do
   end
 
   describe "#unique_admin_uid" do
-    let(:user) { FactoryGirl.build(:user) }
+    let(:player) { FactoryGirl.build(:player) }
     it "returns a random number within the max_uid" do
-      expect(user.unique_uid(10000000)).to match /\A\d{7}\z/
+      expect(player.unique_uid(10000000)).to match /\A\d{7}\z/
     end
     context "when all ids are taken except one" do
       before do
-        User.stub("pluck").with(:uid).and_return(["0","1","2","3","4","5","6","7","8"])
+        Player.stub("pluck").with(:uid).and_return(["0","1","2","3","4","5","6","7","8"])
       end
       it "returns the remaining id" do
-        expect(user.unique_uid(10)).to eq("9")
+        expect(player.unique_uid(10)).to eq("9")
       end
     end
   end
 
   describe "attributes" do
     describe "message" do
-      let(:user) { FactoryGirl.build(:user) }
+      let(:player) { FactoryGirl.build(:player) }
       it "can handle long values" do
-        user.update_attributes(:message => "10 chars. " * 1000).should be_true
+        player.update_attributes(:message => "10 chars. " * 1000).should be_true
       end
     end
   end

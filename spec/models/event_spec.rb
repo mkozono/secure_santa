@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Event do
-  
+
   describe "validations" do
     it "has a valid factory" do
       FactoryGirl.create(:event).should be_valid
@@ -15,51 +15,51 @@ describe Event do
       FactoryGirl.build(:event, name: "!"*301).should_not be_valid
     end
 
-    it "validates unique user names" do
+    it "validates unique player names" do
       event = Event.new(:name => "An Event")
-      2.times { event.users.build(:name => "Foo") }
+      2.times { event.players.build(:name => "Foo") }
       event.save.should be_false
     end
   end
 
   describe "#destroy" do
-    it "destroys associated users" do
-      event = FactoryGirl.create(:event_with_users, users_count: 3)
+    it "destroys associated players" do
+      event = FactoryGirl.create(:event_with_players, players_count: 3)
       event.reload
-      user_count = User.count
+      player_count = Player.count
       event.destroy
-      User.count.should == user_count - 3
+      Player.count.should == player_count - 3
     end
   end
 
   describe "#assign_giftees" do
-    let(:event) { FactoryGirl.create(:event_with_users, users_count: 3) }
-    it "assigns giftees to users" do
+    let(:event) { FactoryGirl.create(:event_with_players, players_count: 3) }
+    it "assigns giftees to players" do
       event.reload
       event.assign_giftees
       event.reload
-      event.users.each do |user|
-        user.giftee.should be_a User
+      event.players.each do |player|
+        player.giftee.should be_a Player
       end
     end
   end
 
   describe "#assigned?" do
-    let(:event) { FactoryGirl.create(:event_with_users, users_count: 3) }
-    context "when all users have a giftee" do
+    let(:event) { FactoryGirl.create(:event_with_players, players_count: 3) }
+    context "when all players have a giftee" do
       before do
         assignment_order = { 0 => 2, 1 => 0, 2 => 1 }
-        users = event.users.to_a
-        users.each_with_index do |user, index|
-          user.giftee = users[assignment_order[index]]
-          user.save
+        players = event.players.to_a
+        players.each_with_index do |player, index|
+          player.giftee = players[assignment_order[index]]
+          player.save
         end
       end
       it "returns true" do
         event.should be_assigned
       end
     end
-    context "when a user does not have a giftee" do
+    context "when a player does not have a giftee" do
       it "returns false" do
         event.reload
         event.should_not be_assigned

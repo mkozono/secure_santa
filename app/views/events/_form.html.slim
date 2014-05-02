@@ -5,12 +5,12 @@
   .field.row style="margin-top: 15px; margin-bottom: 15px"
     .span5 = f.text_field :name, placeholder: "Event Name", style: "width: 100%"
 
-  .users.row
-    = f.fields_for :users do |builder|
-      = render "user_fields", :f => builder
+  .players.row
+    = f.fields_for :players do |builder|
+      = render "player_fields", :f => builder
 
   div style="margin-top: 15px; margin-bottom: 15px"
-    = link_to_add_fields("Add Invitee", f, :users).html_safe
+    = link_to_add_fields("Add Invitee", f, :players).html_safe
 
   .actions style="margin-top: 15px; margin-bottom: 15px"
     = f.submit class: "btn btn-primary"

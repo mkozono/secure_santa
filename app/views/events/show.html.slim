@@ -4,41 +4,41 @@ h2
   | Event 
   = @event.name
 
-- if @event.users.any?
+- if @event.players.any?
   - if @event.assigned?
     p Everyone is assigned a secret santa!
   - else
     p Not everyone has a secret santa!
 - else
-  p Click "Edit Event" to add users!
+  p Click "Edit Event" to add players!
 
 h2 Invitees
 ol
-  - for user in @event.users.order("id asc")
+  - for player in @event.players.order("id asc")
     li
-      = user.name
+      = player.name
       |  - 
-      - if user.uid.blank?
-        = link_to "Claim this user", event_user_path(@event.id, user.id)
+      - if player.uid.blank?
+        = link_to "Claim this player", event_player_path(@event.id, player.id)
       - else
-        | This user has already been claimed
-        - if [User::ROLE_SITE_ADMIN, User::ROLE_EVENT_ADMIN].include?(user_role)
-          = form_for(user, url: reset_user_path(@event.admin_uid, user.uid), html: {method: "PATCH", style: "display:inline"}) do |f|
+        | This player has already been claimed 
+        - if [Player::ROLE_SITE_ADMIN, Player::ROLE_EVENT_ADMIN].include?(player_role)
+          = form_for(player, url: reset_player_path(@event.admin_uid, player.uid), html: {method: "PATCH", style: "display:inline"}) do |f|
             |  - 
-            = f.submit "Reset this user's secret link", class: "btn btn-link", style: "display:inline;padding:0;background:none", onclick: "confirm('Are you sure you want to reset #{user.name}?')"
+            = f.submit "Reset this player's secret link", class: "btn btn-link", style: "display:inline;padding:0;background:none", onclick: "confirm('Are you sure you want to reset #{player.name}?')"
 
-- if user_role == User::ROLE_SITE_ADMIN
+- if player_role == Player::ROLE_SITE_ADMIN
   .assignments
     - if @event.assigned?
       h3 Assignments
       ol
-        - for user in @event.users.order("id asc")
+        - for player in @event.players.order("id asc")
           li
-            = link_to user.name, user.uid ? verified_user_path(user.uid) : event_user_path(@event, user)
+            = link_to player.name, player.uid ? verified_player_path(player.uid) : event_player_path(@event, player)
             |  is giving to 
-            = user.giftee.name
+            = player.giftee.name
 
-- if [User::ROLE_SITE_ADMIN, User::ROLE_EVENT_ADMIN].include?(user_role)
+- if [Player::ROLE_SITE_ADMIN, Player::ROLE_EVENT_ADMIN].include?(player_role)
   .actions
     = form_for(@event, url: assign_giftees_event_path(@event.admin_uid)) do |f|
       = f.submit value: "Assign Giftees", class: "btn btn-primary"

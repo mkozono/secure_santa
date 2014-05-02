@@ -8,13 +8,13 @@ SecureSanta::Application.routes.draw do
   delete 'e/:admin_uid', to: 'events#destroy'
   patch 'e/:admin_uid/assign_giftees', to: 'events#assign_giftees', as: 'assign_giftees_event'
 
-  patch 'e/:admin_uid/u/:uid/reset_user', to: 'users#reset_user', as: 'reset_user'
-  patch 'events/:event_id/users/:id/confirm', to: 'users#confirm', as: 'confirm_event_user'
-  get 'u/:uid', to: 'users#show_verified', as: 'verified_user'
-  patch 'u/:uid', to: 'users#update_verified'
+  patch 'e/:admin_uid/p/:uid/reset_player', to: 'players#reset_player', as: 'reset_player'
+  patch 'events/:event_id/players/:id/confirm', to: 'players#confirm', as: 'confirm_event_player'
+  get 'p/:uid', to: 'players#show_verified', as: 'verified_player'
+  patch 'p/:uid', to: 'players#update_verified'
 
   resources :events, :only => [:index, :show, :new, :create] do
-    resources :users, :only => [:show, :show_verified]
+    resources :players, :only => [:show, :show_verified]
   end
 
   # The priority is based upon order of creation:
