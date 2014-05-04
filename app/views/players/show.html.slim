@@ -2,17 +2,15 @@ h3
   | Event 
   = link_to "#{@player.event.name}", @player.event
 
-- if user_signed_in?
-  | Button to Claim this player for TODO Facebook user name
-- else
-  | Disabled button to Claim this player
-  | Note: If signed in with Facebook, you can claim this player without having to copy and save the secret url.
-
+- unless user_signed_in?
   - User.omniauth_providers.each do |provider|
     = link_to "Sign in with #{provider.to_s.titleize}", omniauth_authorize_path('user', provider)
     br
+  | (If you sign in, you won't have to bookmark your secret URL.  We only save your ID and name, not your email.)
+  br
+  br
 
-  = form_for(@player, url: confirm_event_player_path(@player.event_id, @player.id), html: {method: "PATCH"}) do |f|
-    = f.submit "I am #{@player.name}, take me to my Secret Santa page.  I will copy and save the secret url.", class: 'btn btn-primary', style: "white-space:normal"
+= form_for(@player, url: confirm_event_player_path(@player.event_id, @player.id), html: {method: "PATCH"}) do |f|
+  = f.submit "I am #{@player.name}, take me to my Secret Santa page.", class: 'btn btn-primary', style: "white-space:normal"
 
 = link_to "I am not #{@player.name}, take me back to the event page.", @player.event, class: 'btn btn-default'

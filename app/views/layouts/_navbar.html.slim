@@ -12,5 +12,3 @@ header.navbar.navbar-fixed-top
               p.navbar-text
                 | Signed in as 
                 strong = current_user.name
-            - else
-              = link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook)

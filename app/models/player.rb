@@ -9,6 +9,8 @@ class Player < ActiveRecord::Base
   belongs_to :gifter, class_name: "Player", foreign_key: "giftee_id"
   has_one :giftee, class_name: "Player", foreign_key: "giftee_id"
 
+  belongs_to :user
+
   validates :name, presence: true, length: { maximum: 400 }
   validates :event, presence: true
   validate :giftee_same_event, if: lambda { giftee.present? }
