@@ -1,5 +1,6 @@
 SecureSanta::Application.routes.draw do
 
+  devise_for :users
   root :to => 'events#new'
 
   get 'e/:admin_uid', to: 'events#show_admin', as: 'event_admin'
