@@ -17,6 +17,7 @@ html
 
     .container
       #content
+        = render "shared/flash_messages"
         == yield
 
       #footer style="margin-top: 15px; margin-bottom: 15px"

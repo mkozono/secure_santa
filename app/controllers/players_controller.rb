@@ -3,7 +3,9 @@ class PlayersController < ApplicationController
   def show
     @player = Player.find_by_id(params[:id])
     if @player.present?
-      if @player.uid.present?
+      if user_signed_in? && current_user == @player.user
+        redirect_to verified_player_path(@player.uid) and return
+      elsif @player.uid.present?
         redirect_to @player.event, notice: "Player #{@player.name} has already claimed their secret page!" and return
       end
       render :show
@@ -29,11 +31,19 @@ class PlayersController < ApplicationController
     event = Event.find_by_id(params[:event_id])
     player = Player.find_by_id(params[:id])
     if event && player && player.event_id == event.id
-      if player.uid.blank?
-        player.set_uid
-        player.save!
-        flash[:notice] = "Bookmark this secret page, there is no other way to get to it later!"
-        redirect_to verified_player_path(player.uid) and return
+      if player.uid.blank? && player.user_id.blank?
+        if user_signed_in?
+          player.set_uid
+          player.user = current_user
+          player.save!
+          flash[:notice] = "Successfully claimed player #{player.name}!"
+          redirect_to verified_player_path(player.uid) and return
+        else
+          player.set_uid
+          player.save!
+          flash[:notice] = "Bookmark this secret page, there is no other way to get to it later!"
+          redirect_to verified_player_path(player.uid) and return
+        end
       else
         redirect_to player.event, notice: "Player #{player.name} has already claimed their secret page!" and return
       end
@@ -45,7 +55,7 @@ class PlayersController < ApplicationController
     event = Event.find_by_admin_uid(params[:admin_uid])
     player = Player.find_by_uid(params[:uid])
     if event && player && player.event_id == event.id
-      player.update_attributes!(:uid => nil)
+      player.update_attributes!(:uid => nil, :user_id => nil)
       redirect_to event_admin_path(event.admin_uid)
     end
   end

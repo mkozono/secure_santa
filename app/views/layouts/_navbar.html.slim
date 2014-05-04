@@ -6,3 +6,9 @@ header.navbar.navbar-fixed-top
           li = link_to "New Event", new_event_path
           li = link_to "All Events", events_path
           li = link_to "Help", '#'
+        ul.nav.pull-right
+          li
+            - if user_signed_in?
+              p.navbar-text
+                | Signed in as 
+                strong = current_user.name
