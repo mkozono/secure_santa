@@ -1,6 +1,7 @@
 SecureSanta::Application.routes.draw do
 
-  devise_for :users
+  devise_for :users, controllers: {omniauth_callbacks: "omniauth_callbacks"}
+
   root :to => 'events#new'
 
   get 'e/:admin_uid', to: 'events#show_admin', as: 'event_admin'
