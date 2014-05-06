@@ -35,6 +35,10 @@ class Player < ActiveRecord::Base
     temp_uid
   end
 
+  def claimed?
+    uid.present? || user_id.present?
+  end
+
   private
 
     def giftee_same_event

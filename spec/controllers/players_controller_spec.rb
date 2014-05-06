@@ -36,18 +36,55 @@ describe PlayersController do
 
   describe "PATCH #confirm" do
     context "when the player doesn't have a uid" do
-      it "sets the uid" do
-        player = FactoryGirl.create(:player)
-        patch :confirm, event_id: player.event_id, id: player.id
-        player.reload
-        player.uid.should be_present
+      let(:player) { FactoryGirl.create(:player) }
+      context "when the user is signed in" do
+        before do
+          user = User.create!
+          sign_in user
+          patch :confirm, event_id: player.event_id, id: player.id
+          player.reload
+        end
+        it "sets the uid" do
+          player.uid.should be_present
+        end
+        it "sets the player's user" do
+          player.user.should be_present
+        end
+      end
+      context "when the user is NOT signed in" do
+        before do
+          patch :confirm, event_id: player.event_id, id: player.id
+          player.reload
+        end
+        it "sets the uid" do
+          player.uid.should be_present
+        end
+        it "does NOT set the player's user" do
+          player.user.should be_nil
+        end
       end
     end
-    context "when the player already has a uid" do
-      it "redirects to the event" do
-        player = FactoryGirl.create(:player, uid: "1234567")
-        patch :confirm, event_id: player.event_id, id: player.id
-        response.should redirect_to player.event
+    context "when the player is claimed" do
+      let(:player) { FactoryGirl.create(:player, uid: "1234567") }
+      context "when the user is signed in" do
+        it "redirects to the event" do
+          patch :confirm, event_id: player.event_id, id: player.id
+          response.should redirect_to player.event
+        end
+      end
+      context "when the user is NOT signed in" do
+        it "redirects to the event" do
+          patch :confirm, event_id: player.event_id, id: player.id
+          response.should redirect_to player.event
+        end
+      end
+    end
+    context "when the params are invalid" do
+      it "raises error" do
+        expect{patch :confirm, event_id: nil, id: player.id}.
+          to raise_error
+        expect{patch :confirm, event_id: player.event_id, id: nil}.
+          to raise_error
       end
     end
   end

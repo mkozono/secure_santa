@@ -30,25 +30,9 @@ class PlayersController < ApplicationController
   def confirm
     event = Event.find_by_id(params[:event_id])
     player = Player.find_by_id(params[:id])
-    if event && player && player.event_id == event.id
-      if player.uid.blank? && player.user_id.blank?
-        if user_signed_in?
-          player.set_uid
-          player.user = current_user
-          player.save!
-          flash[:notice] = "Successfully claimed player #{player.name}!"
-          redirect_to verified_player_path(player.uid) and return
-        else
-          player.set_uid
-          player.save!
-          flash[:notice] = "Bookmark this secret page, there is no other way to get to it later!"
-          redirect_to verified_player_path(player.uid) and return
-        end
-      else
-        redirect_to player.event, notice: "Player #{player.name} has already claimed their secret page!" and return
-      end
-    end
-    redirect_to events_path, error: "Could not confirm player." and return
+    redirect_to events_path, error: "Could not claim player in different event." and return if player.event_id != event.id
+    redirect_to player.event, notice: "Player #{player.name} has already claimed their secret page!" and return if player.claimed?
+    return claim_and_redirect_to(player)
   end
 
   def reset_player
@@ -74,6 +58,21 @@ class PlayersController < ApplicationController
 
     def update_params
       params.require(:player).permit(:message)
+    end
+
+    def claim_and_redirect_to(player)
+      if user_signed_in?
+        player.set_uid
+        player.user = current_user
+        player.save!
+        flash[:notice] = "Successfully claimed player #{player.name}!"
+        redirect_to verified_player_path(player.uid)
+      else
+        player.set_uid
+        player.save!
+        flash[:notice] = "Bookmark this secret page, there is no other way to get to it later!"
+        redirect_to verified_player_path(player.uid)
+      end
     end
 
 end

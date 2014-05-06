@@ -70,6 +70,22 @@ describe Player do
     end
   end
 
+  describe "#claimed?" do
+    subject { player.claimed? }
+    context "when the player has a uid" do
+      let(:player) { FactoryGirl.build(:player, :uid => '123') }
+      it { should be_true }
+    end
+    context "when the player has a user" do
+      let(:player) { FactoryGirl.build(:player, :user => User.create!) }
+      it { should be_true }
+    end
+    context "when the player has NEITHER a uid or user" do
+      let(:player) { FactoryGirl.build(:player) }
+      it { should be_false }
+    end
+  end
+
   describe "attributes" do
     describe "message" do
       let(:player) { FactoryGirl.build(:player) }
