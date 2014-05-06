@@ -10,5 +10,4 @@ header.navbar.navbar-fixed-top
           li
             - if user_signed_in?
               p.navbar-text
-                | Signed in as 
-                strong = current_user.name
+                = link_to "Sign out of #{current_user.name}", users_sign_out_path, :method => :delete
