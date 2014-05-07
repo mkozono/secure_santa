@@ -36,7 +36,7 @@ class Player < ActiveRecord::Base
   end
 
   def claimed?
-    uid.present? || user_id.present?
+    uid.present?
   end
 
   private

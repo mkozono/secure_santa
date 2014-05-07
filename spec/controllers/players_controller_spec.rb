@@ -29,11 +29,11 @@ describe PlayersController do
         response.should render_template :show
       end
       context "when the player has a uid" do
-        it "redirects to the event page" do
+        it "assigns the requested player to @player" do
           player.set_uid
           player.save!
           get :show, event_id: player.event_id, id: player
-          response.should redirect_to player.event
+          assigns(:player).should eq(player)
         end
       end
     end

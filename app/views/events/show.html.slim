@@ -17,9 +17,10 @@ ol
       = player.name
       |  - 
       - if player.uid.blank?
-        = link_to "Claim this player", event_player_path(@event.id, player.id)
+        = link_to "Claim or view this player", event_player_path(@event.id, player.id)
       - else
-        | This player has already been claimed 
+        = link_to "View this player", event_player_path(@event.id, player.id)
+        |  (already claimed)
         - if [Player::ROLE_SITE_ADMIN, Player::ROLE_EVENT_ADMIN].include?(player_role)
           = form_for(player, url: reset_player_path(@event.admin_uid, player.uid), html: {method: "PATCH", style: "display:inline"}) do |f|
             |  - 

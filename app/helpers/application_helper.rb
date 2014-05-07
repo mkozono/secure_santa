@@ -26,4 +26,8 @@ module ApplicationHelper
     Player::ROLE_ANONYMOUS
   end
 
+  def avatar_url
+    session[:avatar_url]
+  end
+
 end

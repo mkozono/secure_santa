@@ -1,0 +1,11 @@
+h2
+  | Events for 
+  = current_user.name
+
+h4 You are participating in these events
+- @players.each do |player|
+  a href=verified_player_path(player.uid)
+    strong #{player.event.name}
+    |  under the name 
+    em #{player.name}
+  br

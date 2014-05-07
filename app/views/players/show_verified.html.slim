@@ -6,12 +6,15 @@ h4
   | Secret Santa assignment for 
   = @player.name
 
-h2
-  - if @player.giftee
-    | You are giving to 
-    = "#{@player.giftee.name}!"
-  - else
-    | You are not someone's secret santa!  Check with event admin.
+- if @player.giftee
+  h2 You are giving to 
+  = "#{@player.giftee.name}!"
+- elsif !@player.event.players_claimed?
+  | Still waiting for some players to be claimed before giftees can be assigned.  Tell them to get on with it!
+- elsif !@player.event.assigned?
+  | The event leader has not yet clicked "Assign Giftees".  Tell him/her to get on with it!
+- else
+  h2 You are not someone's secret santa!  Check with event leader.
 
 - if @player.giftee && @player.giftee.message.present?
   h4 Message from your giftee:
@@ -22,3 +25,21 @@ h4 Write a message or wishlist to your secret santa:
   = f.text_area :message, value: @player.message, style: "width:300px;height:120px"
   br
   = f.submit "Update message"
+
+- if @player.user.nil?
+  .well
+    - if user_signed_in?
+      = form_for(@player, url: verified_player_path(@player.uid), html: {method: "PATCH"}) do |f|
+        = f.hidden_field :user_id, value: current_user.id
+        = f.submit "Link this player to #{current_user.name}"
+      h5 Why should I link this player to Facebook?
+    - else
+      = link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook)
+      br
+      h5 Why should I sign in?
+    ul
+      li You won't have to bookmark your secret URL
+      li If you lose your secret URL you'll have to ask the event leader to reset it
+      li We only save your Facebook ID and name
+      li We do NOT save or even receive your email or friends list
+      li We cannot post to your wall

@@ -3,8 +3,7 @@ class PlayersController < ApplicationController
   def show
     @player = Player.find_by_id(params[:id])
     redirect_to event_path(params[:event_id]), error: "Could not find player." and return unless @player
-    redirect_to verified_player_path(@player.uid) and return if user_signed_in? && current_user == @player.user      
-    redirect_to @player.event, notice: "Player #{@player.name} has already claimed their secret page!" and return if @player.uid
+    redirect_to verified_player_path(@player.uid) and return if user_signed_in? && current_user == @player.user
     render :show
   end
 
@@ -45,7 +44,7 @@ class PlayersController < ApplicationController
   private
 
     def update_params
-      params.require(:player).permit(:message)
+      params.require(:player).permit(:message, :user_id)
     end
 
     def claim_and_redirect_to(player)

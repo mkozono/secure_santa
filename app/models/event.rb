@@ -26,6 +26,10 @@ class Event < ActiveRecord::Base
     true
   end
 
+  def players_claimed?
+    players.all? { |p| p.claimed? }
+  end
+
   def destroy_players!(players_attributes)
     return true unless players_attributes
 

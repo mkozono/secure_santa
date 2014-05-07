@@ -76,11 +76,7 @@ describe Player do
       let(:player) { FactoryGirl.build(:player, :uid => '123') }
       it { should be_true }
     end
-    context "when the player has a user" do
-      let(:player) { FactoryGirl.build(:player, :user => User.create!) }
-      it { should be_true }
-    end
-    context "when the player has NEITHER a uid or user" do
+    context "when the player does NOT have a uid" do
       let(:player) { FactoryGirl.build(:player) }
       it { should be_false }
     end
