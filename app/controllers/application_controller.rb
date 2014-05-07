@@ -10,9 +10,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource_or_scope)
-    if request.env['omniauth.origin']
-      request.env['omniauth.origin']
-    end
+    request.env['omniauth.origin'] || resource_or_scope
   end
 
   def after_sign_out_path_for(resource)

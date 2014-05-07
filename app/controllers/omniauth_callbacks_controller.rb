@@ -7,7 +7,8 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
       flash.notice = "Signed in successfully!"
       sign_in_and_redirect user
     else
-      redirect_to events_path, error: "Error while signing in."
+      flash[:error] = "Error while signing in."
+      redirect_to root_path
     end
   end
 

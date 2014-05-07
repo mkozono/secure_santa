@@ -23,9 +23,8 @@ SecureSanta::Application.routes.draw do
     resources :players, :only => [:show, :show_verified]
   end
 
-  resources :users, :only => [] do
-    get :events
-  end
+  get 'users/:id', to: 'users#events', as: 'user'
+  get 'users/:id/events', to: 'users#events', as: 'user_events'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
