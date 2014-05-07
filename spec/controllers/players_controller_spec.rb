@@ -4,20 +4,37 @@ describe PlayersController do
 
   describe "GET #show" do
     let(:player) { FactoryGirl.create(:player) }
-    it "assigns the requested player to @player" do
-      get :show, event_id: player.event_id, id: player
-      assigns(:player).should eq(player)
+    context "given a bad id" do
+      it "redirects to the event" do
+        get :show, event_id: player.event_id, id: 999
+        response.should redirect_to event_path(player.event_id)
+      end
     end
-    it "renders the :show template" do
-      get :show, event_id: player.event_id, id: player
-      response.should render_template :show
+    context "given a signed in user who has claimed this player" do
+      let(:user) { FactoryGirl.create(:user) }
+      let(:player) { FactoryGirl.create(:player, :user => user, :uid => 123) }
+      it "redirects to the verified player page" do
+        sign_in user
+        get :show, event_id: player.event_id, id: player.id
+        response.should redirect_to verified_player_path(123)
+      end
     end
-    context "when the player has a uid" do
-      it "redirects to the event page" do
-        player.set_uid
-        player.save!
+    context "given a good id and NO signed in user" do
+      it "assigns the requested player to @player" do
         get :show, event_id: player.event_id, id: player
-        response.should redirect_to player.event
+        assigns(:player).should eq(player)
+      end
+      it "renders the :show template" do
+        get :show, event_id: player.event_id, id: player
+        response.should render_template :show
+      end
+      context "when the player has a uid" do
+        it "redirects to the event page" do
+          player.set_uid
+          player.save!
+          get :show, event_id: player.event_id, id: player
+          response.should redirect_to player.event
+        end
       end
     end
   end
@@ -80,21 +97,37 @@ describe PlayersController do
       end
     end
     context "when the params are invalid" do
-      it "raises error" do
-        expect{patch :confirm, event_id: nil, id: player.id}.
-          to raise_error
-        expect{patch :confirm, event_id: player.event_id, id: nil}.
-          to raise_error
+      let(:player) { FactoryGirl.create(:player) }
+      let(:player2) { FactoryGirl.create(:player) }
+      before { player.event.should_not eq player2.event }
+      it "redirects to events#index" do
+        expect(patch :confirm, event_id: 999, id: player.id).to redirect_to events_path
+        expect(patch :confirm, event_id: player.event_id, id: 999).to redirect_to events_path
+        expect(patch :confirm, event_id: player.event_id, id: player2.id).to redirect_to events_path
       end
     end
   end
 
   describe "PATCH #reset_player" do
-    it "clears the uid" do
-      player = FactoryGirl.create(:player, uid: "1234567")
-      patch :reset_player, admin_uid: player.event.admin_uid, uid: "1234567"
-      player.reload
-      player.uid.should be_blank
+    let(:player) { FactoryGirl.create(:player, uid: "1234567") }
+    context "given valid params" do
+      it "clears the uid" do
+        patch :reset_player, admin_uid: player.event.admin_uid, uid: 1234567
+        player.reload
+        player.uid.should be_blank
+      end
+    end
+    context "given invalid params" do
+      context "given existing admin_uid" do
+        it "redirects to the event" do
+          expect(patch :reset_player, admin_uid: player.event.admin_uid, uid: 999).to redirect_to player.event
+        end
+      end
+      context "given non-existent admin_uid" do
+        it "redirects to events" do
+          expect(patch :reset_player, admin_uid: 999, uid: player.uid).to redirect_to events_path
+        end
+      end
     end
   end
 
