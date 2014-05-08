@@ -11,8 +11,8 @@ header.navbar.navbar-fixed-top
               p.navbar-text
                 - if avatar_url
                   - avatar_tag = image_tag avatar_url, title: "Signed in as #{current_user.name}"
-                  = link_to "#{avatar_tag}".html_safe, user_events_path(current_user), class: "avatar"
-                = link_to "My events".html_safe, user_events_path(current_user)
+                  = link_to "#{avatar_tag}".html_safe, user_path, class: "avatar"
+                = link_to "My events".html_safe, user_path
                 |  | 
                 = link_to "Sign out", users_sign_out_path, :method => :delete
             - else
