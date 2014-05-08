@@ -7,8 +7,7 @@ h4
   = @player.name
 
 - if @player.giftee
-  h2 You are giving to 
-  = "#{@player.giftee.name}!"
+  h2 You are giving to #{@player.giftee.name}!
 - elsif !@player.event.players_claimed?
   | Still waiting for some players to be claimed before giftees can be assigned.  Tell them to get on with it!
 - elsif !@player.event.assigned?
