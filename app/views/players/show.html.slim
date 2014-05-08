@@ -18,12 +18,7 @@ h3
       = link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook)
       br
       h5 Why should I sign in?
-      ul
-        li You won't have to bookmark your secret URL
-        li If you lose your secret URL you'll have to ask the event leader to reset it
-        li We only save your Facebook ID and name
-        li We do NOT save or even receive your email or friends list
-        li We cannot post to your wall
+      = render "why_sign_in"
 
   = form_for(@player, url: confirm_event_player_path(@player.event_id, @player.id), html: {method: "PATCH"}) do |f|
     = f.submit "I am #{@player.name}, take me to my Secret Santa page.", class: 'btn btn-primary', style: "white-space:normal"

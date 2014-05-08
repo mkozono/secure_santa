@@ -37,9 +37,4 @@ h4 Write a message or wishlist to your secret santa:
       = link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook)
       br
       h5 Why should I sign in?
-    ul
-      li You won't have to bookmark your secret URL
-      li If you lose your secret URL you'll have to ask the event leader to reset it
-      li We only save your Facebook ID and name
-      li We do NOT save or even receive your email or friends list
-      li We cannot post to your wall
+    = render "why_sign_in"
