@@ -3,9 +3,15 @@ h2
   = current_user.name
 
 h4 You are participating in these events
-- @players.each do |player|
-  a href=verified_player_path(player.uid)
-    strong #{player.event.name}
-    |  under the name 
-    em #{player.name}
-  br
+table
+  tr
+    th.hidden-phone Last updated
+    th Event
+    th Player
+    th Status
+  - @players.each do |player|
+    tr
+      td.hidden-phone = player.updated_at.to_date.to_formatted_s(:long)
+      td = link_to player.event.name, player.event
+      td = link_to player.name, verified_player_path(player.uid)
+      td = link_to (player.giftee ? "You have a giftee" : "No giftee assigned"), verified_player_path(player.uid)

@@ -8,12 +8,8 @@ h4
 
 - if @player.giftee
   h2 You are giving to #{@player.giftee.name}!
-- elsif !@player.event.players_claimed?
-  | Still waiting for some players to be claimed before giftees can be assigned.  Tell them to get on with it!
-- elsif !@player.event.assigned?
-  | The event leader has not yet clicked "Assign Giftees".  Tell him/her to get on with it!
 - else
-  h2 You are not someone's secret santa!  Check with event leader.
+  | The event leader has not yet clicked "Assign Giftees".  Bug them about it!
 
 - if @player.giftee && @player.giftee.message.present?
   h4 Message from your giftee:

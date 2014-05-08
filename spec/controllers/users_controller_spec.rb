@@ -14,7 +14,7 @@ describe UsersController do
       it "sets @players" do
         subject
         expect(user.players.size).to eq 2
-        expect(assigns(:players)).to eq user.players
+        expect(assigns(:players)).to match_array user.players
       end
     end
     context "when the user is NOT signed in" do

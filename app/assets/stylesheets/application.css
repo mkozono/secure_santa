@@ -13,3 +13,11 @@
  *= require "navbar"
  *= require "events"
  */
+
+th {
+  background-color: #1CB1C0;
+}
+
+th, td {
+  padding: 6px 12px;
+}
