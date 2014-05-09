@@ -90,4 +90,15 @@ describe Event do
     end
   end
 
+  describe "#set_temporary_date_fields" do
+    it "sets date accessor fields with parsed date" do
+      christmas = Date.new(2014, 12, 25)
+      event = FactoryGirl.build(:event, date: christmas)
+      event.set_temporary_date_fields
+      expect(event.date_month).to eq 12
+      expect(event.date_day).to eq 25
+      expect(event.date_year).to eq 14
+    end
+  end
+
 end

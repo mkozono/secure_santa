@@ -38,7 +38,7 @@ feature "Creating a new event", :js => true do
 
   scenario "Adding invitee textboxes" do
     click_link "Add Invitee"
-    page.should have_css("input[type='text']", :count => 8)
+    page.should have_css("input[type='text'][placeholder='Invitee']", :count => 7)
   end
 
   scenario "Submitting valid data" do

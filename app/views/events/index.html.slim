@@ -4,6 +4,7 @@ table
   tr
     th.hidden-phone Created on
     th Event
+    th Event date
     th Giftees assigned
     th Players claimed
     - if player_role == Player::ROLE_SITE_ADMIN
@@ -12,6 +13,7 @@ table
     tr
       td.hidden-phone = event.created_at.to_date.to_formatted_s(:long)
       td = link_to event.name, event
+      td = event.date ? event.date.to_formatted_s(:long) : ""
       td = event.assigned? ? "Yes" : "No"
       td = event.players_claimed? ? "Yes" : "No"
       - if player_role == Player::ROLE_SITE_ADMIN

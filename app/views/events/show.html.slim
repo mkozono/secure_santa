@@ -1,6 +1,8 @@
 h2
   | Event 
   = @event.name
+  - if @event.date
+    |  on #{@event.date.to_formatted_s(:long)}
 
 - if @event.players.any?
   - if @event.assigned?

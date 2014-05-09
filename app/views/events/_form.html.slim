@@ -3,7 +3,15 @@
   = render "shared/error_messages", :model_obj => @event
 
   .field.row style="margin-top: 15px; margin-bottom: 15px"
-    .span5 = f.text_field :name, placeholder: "Event Name", style: "width: 100%"
+    .span5 = f.text_field :name, placeholder: "Event Name", style: "width:100%"
+    .span1  
+    .span5
+      | Event date 
+      = f.text_field :date_month, placeholder: "MM", style: "width:24px"
+      | /
+      = f.text_field :date_day, placeholder: "DD", style: "width:24px"
+      | /
+      = f.text_field :date_year, placeholder: "YY", style: "width:24px"
 
   .players.row
     = f.fields_for :players do |builder|

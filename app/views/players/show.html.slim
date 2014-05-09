@@ -1,6 +1,8 @@
 h3
   | Event 
   = link_to "#{@player.event.name}", @player.event
+  - if @player.event.date
+    |  on #{@player.event.date.to_formatted_s(:long)}
 
 - if @player.claimed?
   p This player is already claimed!

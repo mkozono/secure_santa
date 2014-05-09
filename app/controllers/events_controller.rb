@@ -63,6 +63,8 @@ class EventsController < ApplicationController
     @event = Event.find_by_admin_uid(params[:admin_uid])
     if @event.nil?
       redirect_to events_path, error: "Could not find event." and return
+    else
+      @event.set_temporary_date_fields
     end
   end
 
@@ -110,11 +112,11 @@ class EventsController < ApplicationController
   private
 
     def create_params
-      params.require(:event).permit(:name, players_attributes: [:name, :id, :_destroy])
+      params.require(:event).permit(:name, :date_month, :date_day, :date_year, players_attributes: [:name, :id, :_destroy])
     end
 
     def update_event_params
-      params.require(:event).permit(:name)
+      params.require(:event).permit(:name, :date_month, :date_day, :date_year)
     end
 
     def update_players_params
