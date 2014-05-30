@@ -9,15 +9,6 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require "bootstrap_and_overrides"
  *= require "navbar"
  *= require "events"
  */
-
-th {
-  background-color: #1CB1C0;
-}
-
-th, td {
-  padding: 6px 12px;
-}
