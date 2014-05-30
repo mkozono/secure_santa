@@ -58,5 +58,8 @@ module SecureSanta
         :request_specs => true
       g.fixture_replacement :factory_girl, :dir => "spec/factories"
     end
+
+    # To fix Bootstrap glyphicons
+    config.assets.paths << "#{Rails}/vendor/assets/fonts"
   end
 end
