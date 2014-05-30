@@ -4,11 +4,7 @@ ruby '2.1.1'
 gem "rails", "~> 4.0.0"
 
 gem 'therubyracer'
-gem 'less-rails'
-gem 'twitter-bootstrap-rails'
 gem 'faker'
-gem 'will_paginate', '3.0.4'
-gem 'bootstrap-will_paginate', '0.0.9'
 gem 'jquery-rails', '~> 3.0.4'
 gem 'pg', '~> 0.16.0'
 gem 'slim-rails', '~> 2.0.1'
