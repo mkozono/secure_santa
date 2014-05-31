@@ -1,4 +1,21 @@
-.avatar img {
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+/* Shrink the avatar, add space from the caret, thin the thumbnail border */
+.user-menu .img-thumbnail {
   max-height: 36px;
   max-width: 36px;
+  margin-right: 3px;
+  padding: 1px;
+}
+
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+/* Since the avatar is taller than text, it needs less padding in the desktop navbar */
+@media (min-width: 768px) {
+  .user-menu a.dropdown-toggle {
+    padding: 7px 4px 7px 7px;
+  }
 }

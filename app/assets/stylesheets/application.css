@@ -10,6 +10,7 @@
  *
  *= require_self
  *= require bootstrap
+ *= require secure_santa_theme
  *= require navbar
  *= require events
  */
