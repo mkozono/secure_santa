@@ -1,28 +1,27 @@
-h3
-  | Event 
-  = link_to "#{@player.event.name}", @player.event
-  - if @player.event.date
-    |  on #{@player.event.date.to_formatted_s(:long)}
+#show-player
+  h3
+    | Event 
+    = link_to "#{@player.event.name}", @player.event
+    - if @player.event.date
+      |  on #{@player.event.date.to_formatted_s(:long)}
 
-- if @player.claimed?
-  p This player is already claimed!
-  - unless user_signed_in?
-    p
-      | If you claimed the user with Facebook, just click 
-      = link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook)
-      |  to go to your Secret Santa page.
-  p If you lost your secret URL, ask your event leader to reset it.
-- else
-  .well
-    - if user_signed_in?
-      | Since you're signed in with #{current_user.provider}, you won't have to bookmark your secret URL!
-    - else
-      = link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook)
-      br
-      h5 Why should I sign in?
-      = render "why_sign_in"
+  - if @player.claimed?
+    p This player is already claimed!
+    - unless user_signed_in?
+      p
+        | If you claimed the user with Facebook, just click 
+        = link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook)
+        |  to go to your Secret Santa page.
+    p If you lost your secret URL, ask your event leader to reset it.
+  - else
+    - unless user_signed_in?
+      .well
+        = link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook)
+        br
+        h5 Why should I sign in?
+        = render "why_sign_in"
 
-  = form_for(@player, url: confirm_event_player_path(@player.event_id, @player.id), html: {method: "PATCH"}) do |f|
-    = f.submit "I am #{@player.name}, take me to my Secret Santa page.", class: 'btn btn-primary', style: "white-space:normal"
+    = form_for(@player, url: confirm_event_player_path(@player.event_id, @player.id), html: {method: "PATCH"}) do |f|
+      = f.submit "I am #{@player.name}, take me to my Secret Santa page.", class: 'btn btn-primary claim-user'
 
-  = link_to "I am not #{@player.name}, take me back to the event page.", @player.event, class: 'btn btn-default'
+    = link_to "I am not #{@player.name}, take me back to the event page.", @player.event, class: 'btn btn-default no-claim-user'
