@@ -1,21 +1,22 @@
 h1 All Events
 
-table
-  tr
-    th.hidden-phone Created on
-    th Event
-    th Event date
-    th Giftees assigned
-    th Players claimed
-    - if player_role == Player::ROLE_SITE_ADMIN
-      th Admin stuff
-  - @events.each do |event|
+.table-responsive
+  table.table.table-striped
     tr
-      td.hidden-phone = event.created_at.to_date.to_formatted_s(:long)
-      td = link_to event.name, event
-      td = event.date ? event.date.to_formatted_s(:long) : ""
-      td = event.assigned? ? "Yes" : "No"
-      td = event.players_claimed? ? "Yes" : "No"
+      th.hidden-phone Created on
+      th Event
+      th Event date
+      th Giftees assigned
+      th Players claimed
       - if player_role == Player::ROLE_SITE_ADMIN
-        td
-          = link_to "Admin page", event_admin_path(event.admin_uid) if event.admin_uid.present?
+        th Admin stuff
+    - @events.each do |event|
+      tr
+        td.hidden-phone = event.created_at.to_date.to_formatted_s(:long)
+        td = link_to event.name, event
+        td = event.date ? event.date.to_formatted_s(:long) : ""
+        td = event.assigned? ? "Yes" : "No"
+        td = event.players_claimed? ? "Yes" : "No"
+        - if player_role == Player::ROLE_SITE_ADMIN
+          td
+            = link_to "Admin page", event_admin_path(event.admin_uid) if event.admin_uid.present?

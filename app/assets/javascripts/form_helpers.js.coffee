@@ -1,4 +1,4 @@
-window.secureSanta ?= {} # create myNamespace if it doesn't already exist
+window.secureSanta ?= {} # create namespace if it doesn't already exist
 
 window.secureSanta.addField = (link, association, content) ->
   new_id = new Date().getTime()
@@ -8,8 +8,8 @@ window.secureSanta.addField = (link, association, content) ->
   secureSanta.bindRemoveFields()
 
 window.secureSanta.removeField = (link) ->
-	$(link).prev("input[type=hidden]").val("1")
-	$(link).closest(".field").hide()
+  $(link).closest(".form-group").find("input[type=hidden]").val("1")
+  $(link).closest(".form-group").hide()
 
 window.secureSanta.bindRemoveFields = () ->
 	$("a.remove_field").unbind("click").click (event) ->

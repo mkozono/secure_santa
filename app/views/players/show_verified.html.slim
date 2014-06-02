@@ -1,37 +1,38 @@
-h3
-  | Event 
-  = link_to "#{@player.event.name}", @player.event
-  - if @player.event.date
-    |  on #{@player.event.date.to_formatted_s(:long)}
+#show-verified-player
+  h3
+    | Event 
+    = link_to "#{@player.event.name}", @player.event
+    - if @player.event.date
+      |  on #{@player.event.date.to_formatted_s(:long)}
 
-h4
-  | Secret Santa assignment for 
-  = @player.name
+  h4
+    | Secret Santa assignment for 
+    = @player.name
 
-- if @player.giftee
-  h2 You are giving to #{@player.giftee.name}!
-- else
-  | The event leader has not yet clicked "Assign Giftees".  Bug them about it!
+  - if @player.giftee
+    h2 You are giving to #{@player.giftee.name}!
+  - else
+    | The event leader has not yet clicked "Assign Giftees".  Bug them about it!
 
-- if @player.giftee && @player.giftee.message.present?
-  h4 Message from your giftee:
-  = text_area_tag "giftee_message", @player.giftee.message, style: "width:300px;height:120px", disabled: true
+  - if @player.giftee && @player.giftee.message.present?
+    h4 Message from your giftee:
+    = text_area_tag "giftee_message", @player.giftee.message, disabled: true
 
-h4 Write a message or wishlist to your secret santa:
-= form_for(@player, url: verified_player_path(@player.uid), html: {method: "PATCH"}) do |f|
-  = f.text_area :message, value: @player.message, style: "width:300px;height:120px"
-  br
-  = f.submit "Update message"
+  h4 Write a message or wishlist to your secret santa:
+  = form_for(@player, url: verified_player_path(@player.uid), html: {method: "PATCH"}) do |f|
+    = f.text_area :message, value: @player.message
+    br
+    = f.submit "Update message", :class => "btn btn-primary"
 
-- if @player.user.nil?
-  .well
-    - if user_signed_in?
-      = form_for(@player, url: verified_player_path(@player.uid), html: {method: "PATCH"}) do |f|
-        = f.hidden_field :user_id, value: current_user.id
-        = f.submit "Link this player to #{current_user.name}"
-      h5 Why should I link this player to Facebook?
-    - else
-      = link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook)
-      br
-      h5 Why should I sign in?
-    = render "why_sign_in"
+  - if @player.user.nil?
+    .well
+      - if user_signed_in?
+        = form_for(@player, url: verified_player_path(@player.uid), html: {method: "PATCH"}) do |f|
+          = f.hidden_field :user_id, value: current_user.id
+          = f.submit "Link this player to #{current_user.name}"
+        h5 Why should I link this player to Facebook?
+      - else
+        = link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook)
+        br
+        h5 Why should I sign in?
+      = render "why_sign_in"
