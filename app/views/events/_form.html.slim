@@ -1,24 +1,29 @@
 - form_url = @event.admin_uid ? event_admin_path(@event.admin_uid) : @event
-= form_for(@event, url: form_url) do |f|
+= form_for(@event, url: form_url, html: { class: "form-horizontal" }) do |f|
   = render "shared/error_messages", :model_obj => @event
 
-  .field.row
-    .span5 = f.text_field :name, placeholder: "Event Name", style: "width:100%"
-    .span1  
-    .span5
-      | Event date 
-      = f.text_field :date_month, placeholder: "MM", style: "width:24px"
-      | /
-      = f.text_field :date_day, placeholder: "DD", style: "width:24px"
-      | /
-      = f.text_field :date_year, placeholder: "YY", style: "width:24px"
+  .form-group
+    = f.label :name, "Event Name", class: "col-sm-2 control-label"
+    .col-sm-10 = f.text_field :name, placeholder: "Event Name", class: "form-control"
 
-  .players.row
+  .form-group
+    = f.label :name, "Event Date", class: "col-sm-2 control-label"
+    .col-sm-10
+      = f.text_field :date_month, placeholder: "MM", style: "width:30px"
+      | /
+      = f.text_field :date_day, placeholder: "DD", style: "width:30px"
+      | /
+      = f.text_field :date_year, placeholder: "YY", style: "width:30px"
+
+  .players
     = f.fields_for :players do |builder|
       = render "player_fields", :f => builder
 
-  div = link_to_add_fields("Add Invitee", f, :players).html_safe
+  .form-group
+    .col-sm-10.col-sm-offset-2
+      = link_to_add_fields("Add Invitee", f, :players).html_safe
 
-  .actions
-    = f.submit class: "btn btn-primary"
-    = link_to "Cancel", @event, class: "btn"
+  .form-group.actions
+    .col-sm-10.col-sm-offset-2
+      = f.submit class: "btn btn-primary"
+      = link_to "Cancel", @event, class: "btn"

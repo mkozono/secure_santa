@@ -1,5 +1,5 @@
-.span6
-  .field
-    .row
-      .span5 = f.text_field :name, placeholder: "Invitee"
-      .span1 = link_to_remove_fields "remove", f
+.form-group
+  = f.label :name, "Invitee", class: "col-sm-2 control-label"
+  .col-sm-8 = f.text_field :name, placeholder: "Invitee", class: "form-control"
+  .col-sm-2
+    p.form-control-static = link_to_remove_fields "remove", f
