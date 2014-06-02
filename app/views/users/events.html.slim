@@ -3,17 +3,18 @@ h2
   = current_user.name
 
 h4 You are participating in these events
-table
-  tr
-    th.hidden-phone Last updated
-    th Event
-    th Event date
-    th Player
-    th Status
-  - @players.each do |player|
+.table-responsive
+  table.table.table-striped
     tr
-      td.hidden-phone = player.updated_at.to_date.to_formatted_s(:long)
-      td = link_to player.event.name, player.event
-      td = player.event.date ? player.event.date.to_formatted_s(:long) : ""
-      td = link_to player.name, verified_player_path(player.uid)
-      td = link_to (player.giftee ? "You have a giftee" : "No giftee assigned"), verified_player_path(player.uid)
+      th.hidden-phone Last updated
+      th Event
+      th Event date
+      th Player
+      th Status
+    - @players.each do |player|
+      tr
+        td.hidden-phone = player.updated_at.to_date.to_formatted_s(:long)
+        td = link_to player.event.name, player.event
+        td = player.event.date ? player.event.date.to_formatted_s(:long) : ""
+        td = link_to player.name, verified_player_path(player.uid)
+        td = link_to (player.giftee ? "You have a giftee" : "No giftee assigned"), verified_player_path(player.uid)
