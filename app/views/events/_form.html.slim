@@ -9,11 +9,7 @@
   .form-group
     = f.label :name, "Event Date", class: "col-sm-2 control-label"
     .col-sm-10
-      = f.text_field :date_month, placeholder: "MM", style: "width:30px"
-      | /
-      = f.text_field :date_day, placeholder: "DD", style: "width:30px"
-      | /
-      = f.text_field :date_year, placeholder: "YY", style: "width:30px"
+      = f.date_field :date, class: "form-control"
 
   .players
     = f.fields_for :players do |builder|
