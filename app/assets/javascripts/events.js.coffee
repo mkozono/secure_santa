@@ -1,5 +1,5 @@
-window.secureSanta ?= {} # create myNamespace if it doesn't already exist
+window.secureSanta ?= {} # create namespace if it doesn't already exist
 
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+$ ->
+  secureSanta.bindAddField()
+  secureSanta.bindRemoveFields()
