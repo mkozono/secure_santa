@@ -8,25 +8,31 @@ h2
   - if @event.assigned?
     p Everyone is assigned a secret santa!
   - else
-    p Not everyone has a secret santa!
+    p Not everyone has a secret santa!  Click "Assign Giftees"!
 - else
   p Click "Edit Event" to add players!
 
 h2 Invitees
-ol
-  - for player in @event.players.order("id asc")
-    li
-      = player.name
-      |  - 
-      - if player.uid.blank?
-        = link_to "Claim or view this player", event_player_path(@event.id, player.id)
-      - else
-        = link_to "View this player", event_player_path(@event.id, player.id)
-        |  (already claimed)
-        - if [Player::ROLE_SITE_ADMIN, Player::ROLE_EVENT_ADMIN].include?(player_role)
-          = form_for(player, url: reset_player_path(@event.admin_uid, player.uid), html: {method: "PATCH", style: "display:inline"}) do |f|
-            |  - 
-            = f.submit "Reset this player's secret link", class: "btn btn-link", style: "display:inline;padding:0;background:none", onclick: "confirm('Are you sure you want to reset #{player.name}?')"
+p Copy and paste this message into your email to send to everyone!
+div.editable
+  p
+    | I'm inviting you to my Secret Santa event!
+    br
+    | Click "Claim or view this player" next to your name to start.
+  ol
+    - for player in @event.players.order("id asc")
+      li
+        = player.name
+        |  - 
+        - if player.uid.blank?
+          = link_to "Claim or view this player", event_player_path(@event.id, player.id)
+        - else
+          = link_to "View this player", event_player_path(@event.id, player.id)
+          |  (already claimed)
+          - if [Player::ROLE_SITE_ADMIN, Player::ROLE_EVENT_ADMIN].include?(player_role)
+            = form_for(player, url: reset_player_path(@event.admin_uid, player.uid), html: {method: "PATCH", style: "display:inline"}) do |f|
+              |  - 
+              = f.submit "Reset this player's secret link", class: "btn btn-link", style: "display:inline;padding:0;background:none", onclick: "confirm('Are you sure you want to reset #{player.name}?')"
 
 - if player_role == Player::ROLE_SITE_ADMIN
   .assignments

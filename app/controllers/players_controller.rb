@@ -54,7 +54,7 @@ class PlayersController < ApplicationController
         player.user = current_user
         flash[:notice] = "Successfully claimed player #{player.name}!"
       else
-        flash[:notice] = "Bookmark this secret page, there is no other way to get to it later!"
+        flash[:error] = "Bookmark this secret page, there is no other way to get to it later!"
       end
 
       player.save!
