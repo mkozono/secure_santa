@@ -51,7 +51,7 @@ class EventsController < ApplicationController
     end
 
     if @event && @event.save
-      flash[:notice] = "Successfully created event.  Bookmark this page if you want to be able to edit it later!"
+      flash[:error] = "Successfully created event.  Bookmark this page if you want to be able to edit it later!"
       redirect_to event_admin_path(@event.admin_uid)
     else
       flash[:error] = "Unable to create event."
@@ -124,7 +124,7 @@ class EventsController < ApplicationController
     def promote_to_event_admin
       @event.set_admin_uid
       @event.save!
-      flash[:notice] = "You are now the event administrator.  Bookmark this page since there is no other way to edit the event later."
+      flash[:error] = "You are now the event administrator.  Bookmark this page since there is no other way to edit the event later."
       redirect_to event_admin_path(@event.admin_uid) and return
     end
 
