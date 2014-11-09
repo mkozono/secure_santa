@@ -25,3 +25,6 @@ spec/lib/.DS_Store
 
 # Ignore precompiled assets
 /public/assets
+
+.tags
+.tags_sorted_by_file
