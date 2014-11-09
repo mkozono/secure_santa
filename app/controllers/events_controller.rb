@@ -99,7 +99,7 @@ class EventsController < ApplicationController
     @event = Event.find_by_admin_uid(params[:admin_uid])
     begin
       @event.assign_giftees
-      redirect_to event_admin_path(@event.admin_uid)
+      redirect_to event_admin_path(@event.admin_uid), notice: "Successfully assigned giftees!"
     rescue Exception => e
       Rails.logger.error e.inspect
       Rails.logger.error e.backtrace
