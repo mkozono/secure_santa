@@ -32,7 +32,7 @@
         - if user_signed_in?
           = form_for(@player, url: verified_player_path(@player.uid), html: {method: "PATCH"}) do |f|
             = f.hidden_field :user_id, value: current_user.id
-            = f.submit "Link this player to #{current_user.name}"
+            = f.submit "Link this player to #{current_user.name}", class: "btn btn-primary"
           h5 Why should I link this player to Facebook?
         - else
           = link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook)
