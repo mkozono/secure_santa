@@ -47,10 +47,6 @@ div.editable
 
 - if [Player::ROLE_SITE_ADMIN, Player::ROLE_EVENT_ADMIN].include?(player_role)
   .actions
-    = form_for(@event, url: assign_giftees_event_path(@event.admin_uid)) do |f|
-      = f.submit value: "Assign Giftees", class: "btn btn-primary"
-
-    = link_to("Edit Event", edit_event_path(@event.admin_uid), class: "btn")
-
-    = form_for(@event, url: event_admin_path(@event.admin_uid), html: { method: :delete }) do |f|
-      = f.submit value: "Delete Event", class: "btn btn-danger"
+    = link_to "Assign Giftees", { action: "assign_giftees" }, method: "patch", class: "btn btn-primary"
+    = link_to "Edit Event", edit_event_path(@event.admin_uid), class: "btn btn-default"
+    = link_to "Delete Event", {}, method: "delete", class: "delete-event", data: { confirm: 'Are you sure?' }

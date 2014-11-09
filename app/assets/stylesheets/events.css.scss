@@ -8,3 +8,12 @@ div.editable {
   max-width: 800px;
   padding: 5px;
 }
+
+.actions {
+  a { margin-right: 10px }
+  .delete-event {
+    color: #b55;
+    display: block;
+    margin: 50px 0 20px;
+  }
+}
