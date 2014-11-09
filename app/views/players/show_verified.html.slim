@@ -16,13 +16,15 @@
 
   - if @player.giftee && @player.giftee.message.present?
     h4 Message from your giftee:
-    = text_area_tag "giftee_message", @player.giftee.message, disabled: true
+    .well
+      = text_area_tag "giftee_message", @player.giftee.message, disabled: true, style: "width:100%"
 
   h4 Write a message or wishlist to your secret santa:
-  = form_for(@player, url: verified_player_path(@player.uid), html: {method: "PATCH"}) do |f|
-    = f.text_area :message, value: @player.message
-    br
-    = f.submit "Update message", :class => "btn btn-primary"
+  .well
+    = form_for(@player, url: verified_player_path(@player.uid), html: {method: "PATCH"}) do |f|
+      = f.text_area :message, value: @player.message, style: "width:100%"
+      br
+      = f.submit "Update message", :class => "btn btn-primary"
 
   - if @player.user.nil?
     p
