@@ -1,4 +1,4 @@
-.well style="max-width:600px"
+.well
   - form_url = @event.admin_uid ? event_admin_path(@event.admin_uid) : @event
   = form_for(@event, url: form_url, html: { class: "form-horizontal" }) do |f|
     = render "shared/error_messages", :model_obj => @event
